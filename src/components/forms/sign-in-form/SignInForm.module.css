@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  flex-direction: column;
+
+  content: center;
+
+  background-color: var(--dark);
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.container > h1 {
+  margin-top: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.labeled-field {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.labeled-field > label {
+  width: 15%;
+  text-align: end;
+
+  overflow: scroll;
+  scrollbar-width: none;
+}
+
+.field-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.error {
+  color: var(--warning);
+  font-size: small;
+}
+
+.submit-container {
+  display: flex;
+  justify-content: end;
+}
