@@ -1,0 +1,94 @@
+
+:root {
+  --image-size: 300px;
+}
+
+.container {
+  width: fit-content;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+
+  padding: 1rem;
+  border-radius: calc(1rem + 12px);
+
+  background-color: var(--dark);
+}
+
+.dropzone-root {
+  background-color: var(--dark-alt);
+  border: 1px dashed var(--light);
+  border-radius: 12px;
+
+  width: var(--image-size);
+  height: var(--image-size);
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.preview {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.preview-button-container {
+  width: var(--image-size);
+  display: flex;
+  justify-content: end;
+  gap: 1rem;
+}
+
+.icon {
+  color: var(--accent);
+}
+
+.dropzone-text-container {
+  margin: 4rem 3rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dropzone-text {
+  color: var(--light);
+}
+
+.preview-text {
+  color: var(--accent-light);
+  font-size: 0.8rem;
+}
+
+.preview-list {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.remove-button {
+  background-color: var(--dark);
+  border-radius: 6px;
+
+  padding: 0.5rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.remove-button:hover {
+  background-color: var(--dark-alt);
+  cursor: pointer;
+}
