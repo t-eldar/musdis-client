@@ -1,0 +1,42 @@
+@import '@radix-ui/colors/black-alpha.css';
+
+.slider-root {
+  position: relative; 
+  display: flex;
+  align-items: center;
+  user-select: none;
+  touch-action: none;
+  width: 200px;
+  height: 20px;
+}
+
+.slider-track {
+  background-color: var(--black-a10);
+  position: relative;
+  flex-grow: 1;
+  border-radius: 9999px;
+  height: 3px;
+}
+
+.slider-range {
+  position: absolute;
+  background-color: white;
+  border-radius: 9999px;
+  height: 100%;
+}
+
+.slider-thumb {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  box-shadow: 0 2px 10px var(--black-a7);
+  border-radius: 10px;
+}
+.slider-thumb:hover {
+  background-color: var(--primary-1);
+}
+.slider-thumb:focus {
+  outline: none;
+  box-shadow: 0 0 0 5px var(--black-a8);
+}
