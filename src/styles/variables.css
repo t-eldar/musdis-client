@@ -1,0 +1,15 @@
+@import "@radix-ui/colors/lime.css";
+@import "@radix-ui/colors/red.css";
+:root {
+  --accent: var(--lime-8);
+  --accent-light: var(--lime-6);
+
+  --warning: var(--red-10);
+
+  --dark: #1d2123;
+  --dark-alt: #1a1e1f;
+
+  --grey: #4f514f;
+
+  --light: #efeee0;
+}
