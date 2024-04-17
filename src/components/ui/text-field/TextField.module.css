@@ -1,0 +1,27 @@
+.main {
+  border: none;
+  border-radius: 12px;
+  background-color: var(--dark-alt);
+
+  flex: 1 0 auto;
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+  line-height: 1;
+  height: fit-content;
+}
+
+.main:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.main::-webkit-outer-spin-button,
+.main::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.main[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
