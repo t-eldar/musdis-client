@@ -1,0 +1,13 @@
+.cover {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+}
+
+.cover-container {
+  object-fit: cover;
+  width: 200px;
+  height: 200px;
+  border-radius: 1rem;
+}

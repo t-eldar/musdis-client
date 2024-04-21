@@ -1,0 +1,47 @@
+:root {
+  --button-size: 4rem;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-width: 270px;
+}
+
+.skip-button,
+.play-button {
+  padding: 0;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--button-size);
+  height: var(--button-size);
+}
+
+.skip-button:hover {
+  background-color: var(--dark-alt);
+
+  border-radius: 1rem;
+}
+
+.play-button {
+  background-color: var(--accent);
+  border-radius: 100%;
+}
+
+.play-button.playing {
+  box-shadow: 0 0 120px var(--accent);
+}
+
+.play-button:hover {
+  background-color: var(--accent-light);
+}
+
+.icon {
+  color: var(--dark);
+}

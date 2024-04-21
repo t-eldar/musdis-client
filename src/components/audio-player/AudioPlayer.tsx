@@ -1,104 +1,119 @@
-import { useSound } from "use-sound";
-import { useEffect, useState } from "react";
-import { ProgressBar } from "./progress-bar";
+import { ProgressBar } from "@components/audio-player/progress-bar";
+import { Controls } from "@components/audio-player/controls";
+import { Cover } from "@components/audio-player/cover";
+import { Root } from "@components/audio-player/root";
+import { TimeProgress } from "@components/audio-player/time-progress";
 
-type AudioPlayerProps = {
-  src: string;
-};
-
-type Time = {
-  minute: number;
-  second: number;
-};
-
-const AudioPlayer = ({ src }: AudioPlayerProps) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [play, { pause, duration, sound }] = useSound(src);
-
-  const [seconds, setSeconds] = useState(0);
-
-  const [time, setTime] = useState<Time>();
-  const [currentTime, setCurrentTime] = useState<Time>();
-
-  useEffect(() => {
-    if (duration) {
-      const sec = duration / 1000;
-      const minute = Math.floor(sec / 60);
-      const secondsRemain = Math.floor(sec % 60);
-      setTime({
-        minute: minute,
-        second: secondsRemain,
-      });
-    }
-  }, [isPlaying, duration]);
-
-  useEffect(() => {
-    if (isPlaying) {
-      console.log(sound?.state());
-
-      const interval = setInterval(() => {
-        if (sound) {
-          const seeked = sound.seek();
-          setSeconds(seeked);
-
-          const minute = Math.floor(seeked / 60);
-          const second = Math.floor(seeked % 60);
-          setCurrentTime({
-            minute,
-            second,
-          });
-        }
-      }, 1000);
-
-      return () => clearInterval(interval);
-    }
-  }, [sound, isPlaying, setSeconds]);
-
-  useEffect(() => {
-    console.log(sound?.state());
-  }, [sound]);
-
-  const handleProgressBarChange = (value: number) => {
-    setSeconds(value);
-    sound?.seek(value);
-  };
-
-  const togglePlay = () => {
-    if (isPlaying) {
-      pause();
-      setIsPlaying(false);
-    } else {
-      play();
-      setIsPlaying(true);
-    }
-  };
-
-  return (
-    <div>
-      <h2>Playing Now</h2>
-      <div></div>
-      <div>
-        <button>prev</button>
-        {!isPlaying ? (
-          <button onClick={togglePlay}>play</button>
-        ) : (
-          <button onClick={togglePlay}>pause</button>
-        )}
-        <button>next</button>
-      </div>
-      <div>
-        {currentTime?.minute}:{currentTime?.second}/{time?.minute}:
-        {time?.second}
-      </div>
-      {duration && (
-        <ProgressBar
-          durationInSeconds={duration / 1000}
-          value={seconds}
-          onValueChange={handleProgressBarChange}
-        />
-      )}
-    </div>
-  );
+const AudioPlayer = {
+  Root: Root,
+  Cover: Cover,
+  TimeProgress: TimeProgress,
+  Controls: Controls,
+  ProgressBar: ProgressBar,
 };
 
 export default AudioPlayer;
+
+// import * as AspectRatio from "@radix-ui/react-aspect-ratio";
+
+// import styles from "./AudioPlayer.module.css";
+// import { AudioControls } from "@components/audio-player/audio-controls";
+// import { AudioProgressBar } from "@components/audio-player/audio-progress-bar";
+// import { useDidMountEffect } from "@hooks/use-did-mount-effect";
+// import { createContext, useRef, useState } from "react";
+// import { AudioTimeProgress } from "@components/audio-player/audio-time-progress";
+
+// type AudioPlayerProps = {
+//   currentSong?: {
+//     title: string;
+//     audioUrl: string;
+//     author: string;
+//     coverUrl: string;
+//   };
+//   onNext: () => void;
+//   onPrevious: () => void;
+// };
+
+// const AudioPlayer = ({ currentSong, onNext, onPrevious }: AudioPlayerProps) => {
+//   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+//   const [isReady, setIsReady] = useState(false);
+//   const [volume, setVolume] = useState(0.2);
+//   const [isPlaying, setIsPlaying] = useState(false);
+
+//   useDidMountEffect(() => {
+//     audioRef.current?.pause();
+
+//     const timeout = setTimeout(() => {
+//       audioRef.current?.play();
+//     }, 500);
+
+//     return () => {
+//       clearTimeout(timeout);
+//     };
+//   }, [currentSong]);
+
+//   function handleNext() {
+//     onNext();
+//   }
+
+//   function handlePrevious() {
+//     if (audioRef.current && audioRef.current.currentTime > 5) {
+//       audioRef.current.currentTime = 0;
+//     } else {
+//       onPrevious();
+//     }
+//   }
+
+//   function handleTogglePlayPause() {
+//     if (isPlaying) {
+//       audioRef.current?.pause();
+//       setIsPlaying(false);
+//     } else {
+//       audioRef.current?.play();
+//       setIsPlaying(true);
+//     }
+//   }
+//   return (
+//     <div style={{ background: "black" }}>
+//       <div className={styles["cover-container"]}>
+//         <AspectRatio.Root ratio={1}>
+//           <img
+//             className={styles.cover}
+//             src={currentSong?.coverUrl}
+//             alt="Upload preview"
+//           />
+//         </AspectRatio.Root>
+//       </div>
+//       {currentSong && (
+//         <audio
+//           ref={audioRef}
+//           preload="metadata"
+//           onPlaying={() => setIsPlaying(true)}
+//           onPause={() => setIsPlaying(false)}
+//           onEnded={handleNext}
+//           onCanPlay={(e) => {
+//             e.currentTarget.volume = volume;
+//             setIsReady(true);
+//           }}
+//           onVolumeChange={(e) => setVolume(e.currentTarget.volume)}
+//           src={currentSong.audioUrl}
+//         />
+//       )}
+//       {isReady && (
+//         <>
+//           <AudioProgressBar audioElement={audioRef.current!} />
+//           <AudioTimeProgress audioElement={audioRef.current!} />
+//           <div>
+//             <AudioControls
+//               isPlaying={isPlaying}
+//               onClickNext={handleNext}
+//               onClickPrevious={handlePrevious}
+//               onClickTogglePlay={handleTogglePlayPause}
+//             />
+//           </div>
+//         </>
+//       )}
+//     </div>
+//   );
+// };
