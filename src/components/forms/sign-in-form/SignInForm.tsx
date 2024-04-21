@@ -6,9 +6,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@components/ui/button";
 import { FaExclamationCircle } from "react-icons/fa";
+import { signIn } from "@services/users";
 
 const formSchema = z.object({
-  usernameOrEmail: z.string(),
+  userNameOrEmail: z.string(),
   password: z.string(),
 });
 
@@ -26,10 +27,10 @@ export const SignInForm = () => {
 
   //TODO add server interaction
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      throw new Error(data.password);
-    } catch (error) {
+    const result = await signIn(data);
+    if (result.status === "success") {
+      console.log("logged in");
+    } else {
       setError("root", {
         message: "This email is already taken",
       });
@@ -60,7 +61,7 @@ export const SignInForm = () => {
             id="username"
             type="text"
             placeholder="Enter your username or email."
-            {...register("usernameOrEmail")}
+            {...register("userNameOrEmail")}
           />
         </div>
         <div className={styles["labeled-field"]}>

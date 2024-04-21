@@ -14,7 +14,7 @@ type BaseRequest<TParams, TData> = (
  * @template TData - Type of the response data.
  */
 type SuccessResponse<TData> = {
-  code: "success";
+  status: "success";
   data: TData;
 };
 
@@ -23,7 +23,7 @@ type SuccessResponse<TData> = {
  * @template TError - Type of the error.
  */
 type ErrorResponse<TError = AxiosError> = {
-  code: "error";
+  status: "error";
   error: TError;
 };
 
@@ -32,9 +32,11 @@ type ErrorResponse<TError = AxiosError> = {
  * @template TData - Type of the response data.
  * @template TError - Type of the error.
  */
-type BaseResponse<TData, TError> = Promise<
+export type BaseResponse<TData, TError> = Promise<
   SuccessResponse<TData> | ErrorResponse<TError>
 >;
+
+// TODO: add error codes mapping
 
 /**
  * Wraps a request function that handles asynchronous requests.
@@ -50,9 +52,9 @@ export default function requestHandler<TParams, TData, TError = AxiosError>(
   return async (params?: TParams): BaseResponse<TData, TError> => {
     try {
       const response = await request(params);
-      return { code: "success", data: response.data };
+      return { status: "success", data: response.data };
     } catch (e) {
-      return { code: "error", error: e as TError };
+      return { status: "error", error: e as TError };
     }
   };
 }
