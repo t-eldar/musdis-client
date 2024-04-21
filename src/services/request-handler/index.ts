@@ -1,4 +1,4 @@
 import requestHandler from "./requestHandler";
 
-export { requestHandler };
+export * from "./requestHandler";
 export default requestHandler;
