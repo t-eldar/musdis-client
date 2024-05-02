@@ -3,15 +3,26 @@
 // import AudioPlayer from "@components/audio-player";
 import AudioPlayer from "@components/audio-player/";
 import ImageUploader from "@components/file-uploaders/image-uploader/ImageUploader";
+import CreateArtistForm from "@components/forms/create-artist-form";
 import SignInForm from "@components/forms/sign-in-form";
 import SignUpForm from "@components/forms/sign-up-form";
 import Navbar from "@components/navbar/Navbar";
 import Button from "@components/ui/button";
+import Select from "@components/ui/select";
 import { TextField } from "@components/ui/text-field";
-import { useState } from "react";
+import { useAwait } from "@hooks/use-await";
+import apiClient from "@services/base";
+import { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 
 const SandboxPage = () => {
+  // const { promise, isLoading, error } = useAwait(
+  //   async () => await apiClient.get("music-service/tracks")
+  // );
+  // useEffect(() => {
+  //   promise();
+  // }, []);
+
   const test =
     "https://storage.googleapis.com/musdis-6b5bf.appspot.com/audio/Alex%20G%20-%20Race.mp3";
 
@@ -73,32 +84,9 @@ const SandboxPage = () => {
 
   return (
     <>
-      {/* <Navbar items={navItems} /> */}
-      {/* <ImageUploader onSubmit={(file) => console.log(file)} /> */}
-      {/* <SignUpForm /> */}
-      {/* <AudioPlayer release={release} src={src} /> */}
-      {/* <AudioPlayer
-        // key={currentSong.index}
-        currentSong={currentSong}
-        songIndex={currentSong.index}
-        songCount={3}
-        onNext={() => setCurrentSong(release.tracks[1])}
-        onPrevious={() => {}}
-      /> */}
-      <AudioPlayer.Root
-        style={{ backgroundColor: "black", minWidth: "270px" }}
-        currentSong={currentSong}
-        onNext={() => setCurrentSong(release.tracks[1])}
-        onPrevious={() => {}}
-      >
-        <AudioPlayer.Cover />
-        <div>
-          {currentSong.author} - {currentSong.title}{" "}
-        </div>
-        <AudioPlayer.Controls />
-        <AudioPlayer.ProgressBar />
-        <AudioPlayer.TimeProgress />
-      </AudioPlayer.Root>
+      {/* <div>error: {error.hasOwnProperty("message")}</div> */}
+      {/* <div>Loading: {isLoading.toString()}</div> */}
+      <SignUpForm />
     </>
   );
 };
