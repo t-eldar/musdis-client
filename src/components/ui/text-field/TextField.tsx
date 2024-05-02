@@ -18,7 +18,7 @@ export type TextFieldRef = HTMLInputElement;
  */
 export const TextField = forwardRef<TextFieldRef, TextFieldProps>(
   (props, ref) => {
-    return <input ref={ref} className={styles.main} {...props} />;
+    return <input ref={ref} className={styles.input} {...props} />;
   }
 );
 
