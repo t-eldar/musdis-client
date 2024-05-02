@@ -10,10 +10,18 @@ import * as AspectRatio from "@radix-ui/react-aspect-ratio";
 import { IconContext } from "react-icons/lib";
 
 type ImageUploaderProps = {
-  onSubmit: (file: File, preview: string) => void;
+  onSubmit:
+    | ((file: File, preview: string) => void)
+    | ((file: File, preview: string) => Promise<void>);
+  error?: string;
+  isLoading?: boolean;
 };
 
-export const ImageUploader = ({ onSubmit }: ImageUploaderProps) => {
+export const ImageUploader = ({
+  onSubmit,
+  error,
+  isLoading,
+}: ImageUploaderProps) => {
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
   const [acceptedFile, setAcceptedFile] = useState<File>();
 
@@ -27,22 +35,28 @@ export const ImageUploader = ({ onSubmit }: ImageUploaderProps) => {
     fileReader.readAsDataURL(acceptedFiles[0]);
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } =
-    useDropzone({
-      onDrop,
-      multiple: false,
-      maxFiles: 1,
-      accept: { "image/*": [] },
-    });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    multiple: false,
+    maxFiles: 1,
+    accept: { "image/*": [] },
+  });
 
   function handleRemove() {
     setPreview(null);
     setAcceptedFile(undefined);
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
+
+    console.log("submitted");
+    
     if (acceptedFile && preview) {
-      onSubmit(acceptedFile, preview as string);
+      if (onSubmit instanceof Promise) {
+        await onSubmit(acceptedFile, preview as string);
+      } else {
+        onSubmit(acceptedFile, preview as string);
+      }
     }
   }
 
@@ -89,8 +103,12 @@ export const ImageUploader = ({ onSubmit }: ImageUploaderProps) => {
             </Button>
           </div>
         )}
-        <Button onClick={handleSubmit}>Submit</Button>
+        <Button onClick={handleSubmit} disabled={isLoading}>
+          Submit
+        </Button>
       </div>
+      {/* TODO: Style error and loading state*/}
+      {error && <span>{error}</span>}
     </div>
   );
 };
