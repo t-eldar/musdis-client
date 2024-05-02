@@ -1,7 +1,6 @@
 import styles from "./SignUpForm.module.css";
 
 import * as Avatar from "@radix-ui/react-avatar";
-import * as Dialog from "@radix-ui/react-dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { TextField } from "@components/ui/text-field";
@@ -9,13 +8,17 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { FaExclamationCircle } from "react-icons/fa";
 import { z } from "zod";
 import { Button } from "@components/ui/button";
-import { Dispatch, useState } from "react";
-import { TbUpload, TbX } from "react-icons/tb";
-import ImageUploader from "@components/file-uploaders/image-uploader";
+import { useState } from "react";
+import { TbUpload } from "react-icons/tb";
+import { ImageUploader } from "@components/file-uploaders/image-uploader";
+import { Modal } from "@components/ui/modal";
+import { useAwait } from "@hooks/use-await";
+import { uploadFile } from "@services/files";
+import { useSignUp } from "@hooks/use-sign-up";
 
 const formSchema = z
   .object({
-    username: z.string(),
+    userName: z.string(),
     email: z.string(),
     password: z.string(),
     confirmPassword: z.string(),
@@ -35,36 +38,17 @@ const formSchema = z
 
 type FormFields = z.infer<typeof formSchema>;
 
-type FileUploadModalProps = {
-  onImageSubmit: (file: File, preview: string) => void;
-  open: boolean;
-  setOpen: Dispatch<React.SetStateAction<boolean>>;
-};
-const FileUploadModal = ({
-  onImageSubmit,
-  open,
-  setOpen,
-}: FileUploadModalProps) => {
-  return (
-    <Dialog.Root open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
-      <Dialog.Portal>
-        <Dialog.Overlay className={styles["dialog-overlay"]} />
-        <Dialog.Content className={styles["dialog-content"]}>
-          <ImageUploader onSubmit={onImageSubmit} />
-          <Dialog.Close asChild>
-            <Button className={styles["icon-button"]}>
-              <TbX />
-            </Button>
-          </Dialog.Close>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
-  );
-};
-
 export const SignUpForm = () => {
   const [avatarFile, setAvatarFile] = useState<{ id: string; url: string }>();
   const [open, setOpen] = useState(false);
+
+  const {
+    promise: uploadImage,
+    isLoading: isUploadLoading,
+    error: uploadError,
+  } = useAwait<typeof uploadFile>(uploadFile);
+
+  const { invoke: invokeSignUp, error: signUpError } = useSignUp();
 
   const {
     register,
@@ -76,14 +60,13 @@ export const SignUpForm = () => {
     resolver: zodResolver(formSchema),
   });
 
-  //TODO add server interaction
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      throw new Error(data.password);
-    } catch (error) {
+    const result = await invokeSignUp(data);
+    if (result === "error") {
       setError("root", {
-        message: "This email is already taken",
+        message:
+          signUpError?.message ||
+          "Something went wrong. Please try again later.",
       });
     }
   };
@@ -98,18 +81,25 @@ export const SignUpForm = () => {
     setOpen(true);
   }
 
-  function handleImageSubmit(file: File, preview: string) {
-    console.log(file);
-    setAvatarFile({ id: file.name, url: preview });
+  async function handleImageSubmit(file: File) {
+    console.log("image submitting");
+
+    const result = await uploadImage(file);
+    if (result) {
+      setAvatarFile({ id: result.id, url: result.url });
+      setValue("avatarFile", { id: result.id, url: result.url });
+      setOpen(false);
+    }
   }
 
   return (
     <>
-      <FileUploadModal
-        open={open}
-        setOpen={setOpen}
-        onImageSubmit={handleImageSubmit}
-      />
+      <Modal open={open} onOpenChange={setOpen}>
+        <ImageUploader
+          onSubmit={handleImageSubmit}
+          error={uploadError?.message}
+        />
+      </Modal>
       <div className={styles.container}>
         <h1>Sign up</h1>
         <form
@@ -138,7 +128,7 @@ export const SignUpForm = () => {
               id="username"
               type="text"
               placeholder="Enter your username."
-              {...register("username")}
+              {...register("userName")}
             />
           </div>
           <div className={styles["labeled-field"]}>
