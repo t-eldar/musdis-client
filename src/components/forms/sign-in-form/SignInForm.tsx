@@ -4,9 +4,10 @@ import { TextField } from "@components/ui/text-field";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Button from "@components/ui/button";
+import { Button } from "@components/ui/button";
 import { FaExclamationCircle } from "react-icons/fa";
-import { signIn } from "@services/users";
+import { useSignIn } from "@hooks/use-sign-in";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   userNameOrEmail: z.string(),
@@ -15,25 +16,31 @@ const formSchema = z.object({
 
 type FormFields = z.infer<typeof formSchema>;
 
-export const SignInForm = () => {
+const SignInForm = () => {
   const {
     register,
     handleSubmit,
     setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     resolver: zodResolver(formSchema),
   });
 
-  //TODO add server interaction
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    const result = await signIn(data);
-    if (result.status === "success") {
-      console.log("logged in");
-    } else {
+  const { invoke: invokeSignIn, isLoading, error } = useSignIn();
+
+  useEffect(() => {
+    if (error?.message) {
       setError("root", {
-        message: "This email is already taken",
+        message: error?.message,
       });
+    }
+  }, [error, setError]);
+
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    const result = await invokeSignIn(data);
+    if (result === "success") {
+      clearErrors();
     }
   };
 
