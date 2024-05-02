@@ -23,29 +23,3 @@ export type PagedDataResponse<TData> = {
     hasNext: boolean;
   };
 };
-
-/**************************************************/
-
-type Tag = {
-  name: string;
-};
-
-type Artist = {
-  name: string;
-};
-
-type Track = {
-  title: string;
-  slug: string;
-  audioUrl: string;
-  tags: Tag[];
-  artists: Artist[];
-};
-
-type Release = {
-  name: string;
-  slug: string;
-  coverUrl: string;
-  artists: Artist[];
-  tracks: Track[];
-};
