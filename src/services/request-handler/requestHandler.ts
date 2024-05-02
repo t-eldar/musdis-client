@@ -2,8 +2,9 @@ import { AxiosError, AxiosResponse } from "axios";
 
 /**
  * Base type of the request.
- * @template TParams - Type of the request parameters.
- * @template TData - Type of the response data.
+ *
+ * @template TParams Type of the request parameters.
+ * @template TData Type of the response data.
  */
 type BaseRequest<TParams, TData> = (
   params?: TParams
@@ -11,7 +12,8 @@ type BaseRequest<TParams, TData> = (
 
 /**
  * Success response with fetched data.
- * @template TData - Type of the response data.
+ *
+ * @template TData Type of the response data.
  */
 type SuccessResponse<TData> = {
   status: "success";
@@ -20,7 +22,8 @@ type SuccessResponse<TData> = {
 
 /**
  * Error response.
- * @template TError - Type of the error.
+ *
+ * @template TError Type of the error.
  */
 type ErrorResponse<TError = AxiosError> = {
   status: "error";
@@ -29,20 +32,21 @@ type ErrorResponse<TError = AxiosError> = {
 
 /**
  * Base response type for request handling.
- * @template TData - Type of the response data.
- * @template TError - Type of the error.
+ *
+ * @template TData Type of the response data.
+ * @template TError Type of the error.
  */
-export type BaseResponse<TData, TError> = Promise<
+export type BaseResponse<TData, TError = AxiosError> = Promise<
   SuccessResponse<TData> | ErrorResponse<TError>
 >;
 
-// TODO: add error codes mapping
-
 /**
  * Wraps a request function that handles asynchronous requests.
- * @template TParams - Type of the request parameters.
- * @template TData - Type of the response data.
- * @template TError - Type of the error.
+ *
+ * @template TParams Type of the request parameters.
+ * @template TData Type of the response data.
+ * @template TError Type of the error.
+ *
  * @param {BaseRequest<TParams, TData>} request - The request function to be wrapped.
  * @returns {BaseResponse<TData, TError>} - A promise resolving to a response.
  */
