@@ -1,5 +1,5 @@
 import { useAudioPlayerContext } from "@components/audio-player/context";
-import { formatTime } from "@utils/time-utils";
+import { formatDuration } from "@utils/time-utils";
 import { ComponentProps, useEffect, useState } from "react";
 
 type TimeProgressProps = ComponentProps<"div">;
@@ -17,8 +17,8 @@ const TimeProgress = (props: TimeProgressProps) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(audioElement?.duration || 0);
 
-  const currentString = formatTime(currentTime);
-  const durationString = formatTime(duration);
+  const currentString = formatDuration(currentTime);
+  const durationString = formatDuration(duration);
 
   useEffect(() => {
     if (isReady) {

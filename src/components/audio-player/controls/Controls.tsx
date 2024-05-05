@@ -21,7 +21,10 @@ const Controls = (props: ControlsProps) => {
   }
 
   return (
-    <div className={props.className || styles.container} {...props}>
+    <div
+      className={combineClassNames(props.className, styles.container)}
+      {...props}
+    >
       <Button
         className={styles["skip-button"]}
         onClick={context.handleClickPrevious}

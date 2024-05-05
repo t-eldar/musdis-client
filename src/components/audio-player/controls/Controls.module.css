@@ -10,6 +10,10 @@
   min-width: 270px;
 }
 
+.skip-button{
+  color: var(--light);
+}
+
 .skip-button,
 .play-button {
   padding: 0;

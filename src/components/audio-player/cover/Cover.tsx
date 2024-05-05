@@ -1,9 +1,12 @@
-import * as AspectRatio from "@radix-ui/react-aspect-ratio";
-
-import { useAudioPlayerContext } from "@components/audio-player/context";
 import styles from "./Cover.module.css";
 
-const Cover = () => {
+import { useAudioPlayerContext } from "@components/audio-player/context";
+import { combineClassNames } from "@utils/style-utils";
+import { ComponentProps } from "react";
+
+type CoverProps = ComponentProps<"div">;
+
+const Cover = (props: CoverProps) => {
   const context = useAudioPlayerContext();
   if (context === null) {
     throw new Error(
@@ -14,14 +17,15 @@ const Cover = () => {
   const { currentSong } = context;
 
   return (
-    <div className={styles["cover-container"]}>
-      <AspectRatio.Root ratio={1}>
-        <img
-          className={styles.cover}
-          src={currentSong.coverUrl}
-          alt="Upload preview"
-        />
-      </AspectRatio.Root>
+    <div
+      className={combineClassNames(styles["cover-container"], props.className)}
+      {...props}
+    >
+      <img
+        className={styles.cover}
+        src={currentSong.coverUrl}
+        alt="Upload preview"
+      />
     </div>
   );
 };

@@ -1,13 +1,14 @@
 import { AudioPlayerContext } from "@components/audio-player/context";
 import { useDidMountEffect } from "@hooks/use-did-mount-effect";
-import { ComponentProps, useRef, useState } from "react";
+import { useAudioStore } from "@stores/audio-store";
+import { ComponentProps, useEffect, useRef, useState } from "react";
 
 type RootProps = ComponentProps<"div"> & {
   children: JSX.Element | JSX.Element[];
   currentSong: {
     title: string;
     audioUrl: string;
-    author: string;
+    artists: { name: string; slug: string }[];
     coverUrl: string;
   };
   onNext: () => void;
@@ -21,9 +22,17 @@ const Root = ({
   onPrevious,
   ...rest
 }: RootProps) => {
-  const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const setAudioElement = useAudioStore((state) => state.setAudioElement);
+  const setIsPlatingState = useAudioStore((state) => state.setIsPlaying);
+
+  useEffect(() => {
+    if (isReady) {
+      setAudioElement(audioRef.current);
+    }
+  }, [isReady, setAudioElement]);
 
   useDidMountEffect(() => {
     audioRef.current?.pause();
@@ -75,8 +84,14 @@ const Root = ({
       <audio
         ref={audioRef}
         preload="metadata"
-        onPlaying={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
+        onPlaying={() => {
+          setIsPlatingState(true);
+          setIsPlaying(true);
+        }}
+        onPause={() => {
+          setIsPlatingState(false);
+          setIsPlaying(false);
+        }}
         onEnded={handleNext}
         onCanPlay={() => {
           // e.currentTarget.volume = volume;
