@@ -1,13 +1,16 @@
-import { createContext } from "react";
+import { Dispatch, SetStateAction, createContext } from "react";
 
 type AudioContext = {
   audioElement: HTMLAudioElement | null;
   isPlaying: boolean;
-  setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsPlaying: Dispatch<SetStateAction<boolean>>;
   currentSong: {
     title: string;
     audioUrl: string;
-    author: string;
+    artists: {
+      name: string;
+      slug: string;
+    }[];
     coverUrl: string;
   };
   isReady: boolean;
