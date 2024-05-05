@@ -1,9 +1,10 @@
 /**
- * Formats given time in seconds to MM:SS.
+ * Formats given duration in seconds to MM:SS.
+ * 
  * @param timeInSeconds Time in seconds
  * @returns Time in MM:SS
  */
-export function formatTime(timeInSeconds: number): string {
+export function formatDuration(timeInSeconds: number): string {
   if (timeInSeconds && !isNaN(timeInSeconds)) {
     const minutes = Math.floor(timeInSeconds / 60);
     const formatMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
