@@ -8,17 +8,23 @@ const fileDetailsSchema = z.object({
 });
 export type FileDetails = z.infer<typeof fileDetailsSchema>;
 
-export async function getAntiforgeryToken() {
-  await apiClient.get("file-service/antiforgery/token");
+export async function getAntiforgeryToken(abortSignal?: AbortSignal) {
+  await apiClient.get("file-service/antiforgery/token", {
+    signal: abortSignal,
+  });
 }
 
-export async function uploadFile(file: File): Promise<FileDetails> {
-  await getAntiforgeryToken();
+export async function uploadFile(
+  file: File,
+  abortSignal?: AbortSignal
+): Promise<FileDetails> {
+  await getAntiforgeryToken(abortSignal);
 
   const formData = new FormData();
   formData.append("file", file);
 
   const result = await apiClient.post("file-service/files", formData, {
+    signal: abortSignal,
     headers: {
       "Content-Type": "multipart/form-data",
       "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),

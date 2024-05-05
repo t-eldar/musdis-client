@@ -13,7 +13,7 @@ type CreateArtistRequest = {
   userIds: string[];
 };
 
-const artistSchema = z.object({
+export const artistSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
   slug: z.string(),
@@ -23,12 +23,15 @@ const artistSchema = z.object({
   users: userSchema.array(),
 });
 
-type Artist = z.infer<typeof artistSchema>;
+export type Artist = z.infer<typeof artistSchema>;
 
 export async function createArtist(
-  request: CreateArtistRequest
+  request: CreateArtistRequest,
+  abortSignal?: AbortSignal
 ): Promise<Artist> {
-  const result = await apiClient.post("music-service/artists", request);
+  const result = await apiClient.post("music-service/artists", request, {
+    signal: abortSignal,
+  });
 
   return await artistSchema.parseAsync(result.data);
 }

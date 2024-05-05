@@ -14,8 +14,12 @@ const wrappedSchema = z.object({
 
 export type ArtistType = z.infer<typeof artistTypeSchema>;
 
-export async function getArtistTypes(): Promise<DataResponse<ArtistType[]>> {
-  const result = await apiClient.get("music-service/artist-types");
+export async function getArtistTypes(
+  abortSignal?: AbortSignal
+): Promise<DataResponse<ArtistType[]>> {
+  const result = await apiClient.get("music-service/artist-types", {
+    signal: abortSignal,
+  });
 
   return await wrappedSchema.parseAsync(result.data);
 }

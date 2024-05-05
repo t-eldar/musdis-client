@@ -14,8 +14,13 @@ export type SignInRequest = {
   userNameOrEmail: string;
   password: string;
 };
-export async function signIn(request: SignInRequest): Promise<User> {
-  const result = await apiClient.post("identity-service/sign-in", request);
+export async function signIn(
+  request: SignInRequest,
+  abortSignal?: AbortSignal
+): Promise<User> {
+  const result = await apiClient.post("identity-service/sign-in", request, {
+    signal: abortSignal,
+  });
 
   return userSchema.parse(result.data);
 }
