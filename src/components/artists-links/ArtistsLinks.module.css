@@ -1,0 +1,16 @@
+.link {
+  all: unset;
+  cursor: pointer;
+  text-align: left;
+}
+.link:hover {
+  text-decoration: underline;
+}
+
+.container {
+  display: flex;
+
+  white-space: nowrap;
+  overflow: scroll;
+  scrollbar-width: none;
+}
