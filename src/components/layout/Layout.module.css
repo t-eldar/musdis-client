@@ -1,0 +1,31 @@
+:root {
+  --extra-footer-height: 8rem;
+}
+
+.extra-footer {
+  height: var(--extra-footer-height);
+}
+
+.container {
+  display: grid;
+  grid-template-columns: min-content auto;
+  grid-gap: 0.5rem;
+}
+
+.navbar {
+  width: 3rem;
+  height: 100vh;
+  padding: 0 1rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.content {
+  border-radius: 1rem;
+
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
