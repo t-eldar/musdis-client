@@ -1,14 +1,5 @@
-import { DependencyList, EffectCallback, useEffect, useRef } from "react";
-
-function useFirstRender() {
-  const firstRender = useRef(true);
-
-  useEffect(() => {
-    firstRender.current = false;
-  }, []);
-
-  return firstRender.current;
-}
+import { useFirstRender } from "@hooks/use-first-render";
+import { DependencyList, EffectCallback, useEffect } from "react";
 
 /**
  * Call effects after the component is mounted.
