@@ -5,6 +5,6 @@
  */
 export function combineClassNames(
   ...classNames: (string | undefined | null)[]
-): string {
+): string {  
   return classNames.filter(Boolean).join(" ");
 }

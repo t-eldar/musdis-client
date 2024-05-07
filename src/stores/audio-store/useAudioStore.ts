@@ -26,5 +26,7 @@ export const useAudioStore = create<AudioStore>((set) => ({
   setIsPlaying: (isPlaying) => set({ isPlaying }),
 
   audioElement: null,
-  setAudioElement: (audioElement) => set({ audioElement }),
+  setAudioElement: (audioElement) => {
+    set({ audioElement });
+  },
 }));
