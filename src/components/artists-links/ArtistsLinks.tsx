@@ -16,7 +16,11 @@ const ArtistsLinks = ({ artists, className }: ArtistsLinksProps) => {
       {artists.map((artist, i) => (
         <div key={artist.slug}>
           {i !== 0 && ", "}
-          <Link to={`/artists/${artist.slug}`} className={styles["link"]}>
+          <Link
+            to={`/artists/${artist.slug}`}
+            className={styles["link"]}
+            onClick={(e) => e.stopPropagation()}
+          >
             {artist.name}
           </Link>
         </div>
