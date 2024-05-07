@@ -15,4 +15,17 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background-color: var(--dark);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 10px;
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+
+  background: var(--accent);
 }
