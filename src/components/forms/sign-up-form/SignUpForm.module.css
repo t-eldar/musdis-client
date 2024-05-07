@@ -6,9 +6,10 @@
 
   justify-content: center;
 
-  background-color: var(--dark);
   padding: 2rem;
   border-radius: 1rem;
+
+  color: var(--light);
 }
 
 .container > h1 {

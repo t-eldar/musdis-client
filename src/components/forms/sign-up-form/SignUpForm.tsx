@@ -1,25 +1,27 @@
 import styles from "./SignUpForm.module.css";
 
-import * as Avatar from "@radix-ui/react-avatar";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as Avatar from "@radix-ui/react-avatar";
 
+import { ImageUploader } from "@components/file-uploaders/image-uploader";
+import { Button } from "@components/ui/button";
+import { Modal } from "@components/ui/modal";
 import { TextField } from "@components/ui/text-field";
+import { useAwait } from "@hooks/use-await";
+import { useSignUp } from "@hooks/use-sign-up";
+import { uploadFile } from "@services/files";
+import { ComponentProps, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FaExclamationCircle } from "react-icons/fa";
-import { z } from "zod";
-import { Button } from "@components/ui/button";
-import { useState } from "react";
 import { TbUpload } from "react-icons/tb";
-import { ImageUploader } from "@components/file-uploaders/image-uploader";
-import { Modal } from "@components/ui/modal";
-import { useAwait } from "@hooks/use-await";
-import { uploadFile } from "@services/files";
-import { useSignUp } from "@hooks/use-sign-up";
+import { z } from "zod";
+import { combineClassNames } from "@utils/style-utils";
+import ErrorMessage from "@components/error-message";
 
 const formSchema = z
   .object({
     userName: z.string(),
-    email: z.string(),
+    email: z.string().email(),
     password: z.string(),
     confirmPassword: z.string(),
     avatarFile: z.object({
@@ -38,15 +40,16 @@ const formSchema = z
 
 type FormFields = z.infer<typeof formSchema>;
 
-export const SignUpForm = () => {
+export const SignUpForm = (props: ComponentProps<"div">) => {
+  const className = props.className;
+  const unstyledProps = { ...props };
+  delete unstyledProps.className;
+
   const [avatarFile, setAvatarFile] = useState<{ id: string; url: string }>();
   const [open, setOpen] = useState(false);
 
-  const {
-    promise: uploadImage,
-    isLoading: isUploadLoading,
-    error: uploadError,
-  } = useAwait<typeof uploadFile>(uploadFile);
+  const { promise: uploadImage, error: uploadError } =
+    useAwait<typeof uploadFile>(uploadFile);
 
   const { invoke: invokeSignUp, error: signUpError } = useSignUp();
 
@@ -61,6 +64,8 @@ export const SignUpForm = () => {
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    console.log(errors);
+
     const result = await invokeSignUp(data);
     if (result === "error") {
       setError("root", {
@@ -82,8 +87,6 @@ export const SignUpForm = () => {
   }
 
   async function handleImageSubmit(file: File) {
-    console.log("image submitting");
-
     const result = await uploadImage(file);
     if (result) {
       setAvatarFile({ id: result.id, url: result.url });
@@ -100,7 +103,10 @@ export const SignUpForm = () => {
           error={uploadError?.message}
         />
       </Modal>
-      <div className={styles.container}>
+      <div
+        className={combineClassNames(styles.container, className)}
+        {...unstyledProps}
+      >
         <h1>Sign up</h1>
         <form
           className={styles.form}
@@ -164,11 +170,9 @@ export const SignUpForm = () => {
             </Button>
           </div>
         </form>
-        {errors.root && (
-          <span className={styles.error}>
-            <FaExclamationCircle />
-            {" " + errors.root.message}
-          </span>
+
+        {errors.root && errors.root.message && (
+          <ErrorMessage message={errors.root.message} />
         )}
       </div>
     </>

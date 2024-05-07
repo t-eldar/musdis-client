@@ -1,13 +1,15 @@
 import styles from "./SignInForm.module.css";
 
-import { TextField } from "@components/ui/text-field";
-import { z } from "zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
-import { FaExclamationCircle } from "react-icons/fa";
+import { TextField } from "@components/ui/text-field";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useSignIn } from "@hooks/use-sign-in";
-import { useEffect } from "react";
+import { combineClassNames } from "@utils/style-utils";
+import { isAxiosError } from "axios";
+import { ComponentProps, useEffect } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { FaExclamationCircle } from "react-icons/fa";
+import { z } from "zod";
 
 const formSchema = z.object({
   userNameOrEmail: z.string(),
@@ -16,7 +18,11 @@ const formSchema = z.object({
 
 type FormFields = z.infer<typeof formSchema>;
 
-const SignInForm = () => {
+const SignInForm = (props: ComponentProps<"div">) => {
+  const className = props.className;
+  const unstyledProps = { ...props };
+  delete unstyledProps.className;
+
   const {
     register,
     handleSubmit,
@@ -27,12 +33,15 @@ const SignInForm = () => {
     resolver: zodResolver(formSchema),
   });
 
-  const { invoke: invokeSignIn, isLoading, error } = useSignIn();
+  const { invoke: invokeSignIn, error } = useSignIn();
 
   useEffect(() => {
-    if (error?.message) {
+    if (isAxiosError(error)) {
       setError("root", {
-        message: error?.message,
+        message:
+          error.response?.status === 401
+            ? "Incorrect username or password"
+            : error.message,
       });
     }
   }, [error, setError]);
@@ -51,7 +60,10 @@ const SignInForm = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div
+      className={combineClassNames(styles.container, className)}
+      {...unstyledProps}
+    >
       <h1>Sign in</h1>
       <form
         className={styles.form}
@@ -84,14 +96,14 @@ const SignInForm = () => {
           <Button type="submit" disabled={isSubmitting}>
             Sign in
           </Button>
+          {errors.root && (
+            <span className={styles.error}>
+              <FaExclamationCircle />
+              {" " + errors.root.message}
+            </span>
+          )}
         </div>
       </form>
-      {errors.root && (
-        <span className={styles.error}>
-          <FaExclamationCircle />
-          {" " + errors.root.message}
-        </span>
-      )}
     </div>
   );
 };
