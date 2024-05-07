@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { useAudioStore } from "@stores/audio-store";
 import { combineClassNames } from "@utils/style-utils";
 import ArtistsLinks from "@components/artists-links";
-const AudioPlayerOverlay = () => {
+
+type AudioPlayerOverlayProps = {
+  onActiveChange?: (isActive: boolean) => void;
+};
+const AudioPlayerOverlay = ({ onActiveChange }: AudioPlayerOverlayProps) => {
   const playlist = useAudioStore((state) => state.playlist);
   const trackId = useAudioStore((state) => state.currentTrackId);
   const audioElement = useAudioStore((state) => state.audioElement);
@@ -20,6 +24,10 @@ const AudioPlayerOverlay = () => {
     }[];
     coverUrl: string;
   }>();
+
+  useEffect(() => {
+    onActiveChange?.(isActive);
+  }, [isActive, onActiveChange]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -38,8 +46,28 @@ const AudioPlayerOverlay = () => {
     }
   }, [playlist, trackId]);
 
-  function handleNext() {}
-  function handlePrevious() {}
+  function handleNext() {
+    if (!playlist) {
+      return;
+    }
+    const index = playlist.findIndex((t) => t.id === trackId);
+    if (index < playlist.length - 1) {
+      setTrack(playlist[index + 1]);
+    } else {
+      setTrack(playlist[0]);
+    }
+  }
+  function handlePrevious() {
+    if (!playlist) {
+      return;
+    }
+    const index = playlist.findIndex((t) => t.id === trackId);
+    if (index > 1) {
+      setTrack(playlist[index - 1]);
+    } else {
+      setTrack(playlist[playlist.length - 1]);
+    }
+  }
 
   if (track) {
     return (
