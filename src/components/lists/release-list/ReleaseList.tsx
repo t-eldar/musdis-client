@@ -1,9 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./ReleaseList.module.css";
 
-import * as AspectRatio from "@radix-ui/react-aspect-ratio";
-import { ComponentProps } from "react";
+import { ArtistsLinks } from "@components/artists-links";
 import { combineClassNames } from "@utils/style-utils";
+import { ComponentProps } from "react";
+import { TbList } from "react-icons/tb";
 
 type ReleaseListProps = ComponentProps<"ul"> & {
   releases: {
@@ -14,6 +15,9 @@ type ReleaseListProps = ComponentProps<"ul"> & {
       slug: string;
       name: string;
     }[];
+    tracks: {
+      slug: string;
+    }[];
   }[];
 };
 
@@ -23,32 +27,26 @@ const ReleaseList = ({ releases, ...rest }: ReleaseListProps) => {
   return (
     <ul className={combineClassNames(styles.list, rest.className)} {...rest}>
       {releases.map((release) => (
-        <li key={release.slug} className={styles.item}>
-          <AspectRatio.Root
-            className={styles["cover-container"]}
-            onClick={() => navigate(`/releases/${release.slug}`)}
-          >
+        <li
+          key={release.slug}
+          className={styles.item}
+          onClick={() => navigate(`/releases/${release.slug}`)}
+        >
+          <div className={styles["cover-container"]}>
             <img className={styles.cover} src={release.coverUrl} />
-          </AspectRatio.Root>
-          <Link
-            className={styles["release-link"]}
-            to={`/releases/${release.slug}`}
-          >
-            {release.name}
-          </Link>
-          <div className={styles["artists-container"]}>
-            {release.artists.map((artist, index) => (
-              <div>
-                {index !== 0 && ", "}
-                <Link
-                  key={artist.slug}
-                  to={`/artist/${artist.slug}`}
-                  className={styles["artist-link"]}
-                >
-                  {artist.name}
-                </Link>
+          </div>
+          <div className={styles["info-container"]}>
+            <span className={styles["release-link"]}>{release.name}</span>
+            <div className={styles["artists-container"]}>
+              <ArtistsLinks
+                artists={release.artists}
+                className={styles["artists"]}
+              />
+              <div className={styles["total-tracks"]}>
+                <TbList />
+                {release.tracks.length}
               </div>
-            ))}
+            </div>
           </div>
         </li>
       ))}

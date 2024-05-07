@@ -5,18 +5,22 @@
 .list {
   all: unset;
   display: flex;
-  gap: 3rem;
+  gap: 1.6rem;
   flex-wrap: wrap;
-
-}
-
-.list > li {
-  all: unset;
 }
 
 .item {
+  all: unset;
   display: flex;
-  width: fit-content;
+  flex-direction: column;
+  width: var(--item-size);
+
+  background-color: var(--dark-alt);
+  border-radius: 1rem;
+}
+.item:hover {
+  cursor: pointer;
+  box-shadow: 0 0 0 1px var(--accent);
 }
 
 .cover-container {
@@ -27,28 +31,51 @@
 
 .cover {
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1;
   object-fit: cover;
   border-radius: inherit;
 
   cursor: pointer;
 }
-.artist-link,
+
 .release-link {
   all: unset;
   cursor: pointer;
+
+  color: var(--light);
+  font-weight: 500;
+  font-size: 1.4rem;
 }
 
-.release-link {
-  font-size: 1.4rem;
+.artists {
+  width: 70%;
+  display: flex;
+  width: var(--item-size);
+
+  color: var(--light);
+}
+
+.total-tracks {
+  width: 30%;
+  text-align: right;
+  color: var(--light);
+
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  justify-content: flex-end;
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  
+  padding: 0 1rem 1rem 1em;
 }
 
 .artists-container {
   display: flex;
-  width: var(--item-size);
-}
-
-.artist-link:hover,
-.release-link:hover {
-  text-decoration: underline;
+  width: 100%;
 }
