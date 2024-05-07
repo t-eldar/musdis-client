@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.text {
+  color: var(--light);
+}
+
+.link {
+  all: unset;
+  cursor: pointer;
+
+  color: var(--accent);
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.form {
+  width: 70%;
+}
