@@ -1,4 +1,5 @@
-import { TrackList } from "@components/lists/track-list";
+import ArtistList from "@components/lists/artist-list";
+import MosaicReleaseList from "@components/lists/mosaic-release-list";
 
 /**
  * Page for testing components in isolation.
@@ -12,49 +13,23 @@ const SandboxPage = () => {
 
     return arr;
   }
-  const tracks = createArray(
+  const artists = createArray(
     {
-      id: "1",
+      id: "string",
+      slug: "string",
+      name: "string",
+      type: {
+        name: "Musician",
+        slug: "musician"
+      },
       coverUrl:
-        "https://images.genius.com/1af98c5aa0b4b58669d987be6aec97a8.1000x1000x1.png",
-      slug: "track-1",
-      title: "Track asdasdsadsadsadsadsdsadsdads1",
-      audioUrl:
-        "https://storage.googleapis.com/musdis-6b5bf.appspot.com/audio/Alex%20G%20-%20Race.mp3",
-      artists: [
-        {
-          id: "1",
-          slug: "artist-1",
-          name: "Artist 1",
-          coverUrl: "",
-          type: {
-            id: "1",
-            name: "Artist",
-            slug: "artist",
-          },
-          creatorId: "1",
-          users: [],
-        },
-        {
-          id: "2",
-          slug: "artist-221",
-          name: "Artist 12",
-          coverUrl: "",
-          type: {
-            id: "1",
-            name: "Artist",
-            slug: "artist",
-          },
-          creatorId: "1",
-          users: [],
-        },
-      ],
+        "https://storage.googleapis.com/musdis-6b5bf.appspot.com/image/e761cb91-925f-410e-b5a0-8efedf61e6a8.jpg",
     },
     20
   );
   return (
     <>
-      <TrackList tracks={tracks} />
+      <ArtistList artists={artists} />
     </>
   );
 };
