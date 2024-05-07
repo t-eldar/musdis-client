@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import Button from "@components/ui/button";
 
-type NavbarItem = {
+export type NavbarItem = {
   icon: JSX.Element;
 } & (
   | {
