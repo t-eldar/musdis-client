@@ -11,9 +11,14 @@ import { TbPlayerPauseFilled, TbPlayerPlayFilled } from "react-icons/tb";
 
 type TrackListProps = ComponentProps<"ul"> & {
   tracks: Track[];
+  onTotalDurationChange?: (totalDuration: number) => void;
 };
 
-const TrackList = ({ tracks, ...rest }: TrackListProps) => {
+const TrackList = ({
+  tracks,
+  onTotalDurationChange,
+  ...rest
+}: TrackListProps) => {
   const [trackDurations, setTrackDurations] = useState<string[]>(
     tracks.map(() => "--:--")
   );
@@ -23,6 +28,7 @@ const TrackList = ({ tracks, ...rest }: TrackListProps) => {
   useEffect(() => {
     const fetchDurations = async () => {
       const durations: string[] = [];
+      let totalDuration = 0;
       const audio = new Audio();
       for (const track of tracks) {
         try {
@@ -36,7 +42,7 @@ const TrackList = ({ tracks, ...rest }: TrackListProps) => {
             });
             audio.load();
           });
-
+          totalDuration += duration;
           durations.push(formatDuration(duration));
         } catch (error) {
           console.error(
@@ -46,11 +52,12 @@ const TrackList = ({ tracks, ...rest }: TrackListProps) => {
           durations.push("--:--");
         }
       }
+      onTotalDurationChange?.(totalDuration);
       setTrackDurations(durations);
     };
 
     fetchDurations();
-  }, [tracks]);
+  }, [tracks, onTotalDurationChange]);
 
   function handleClickPlay(track: Track) {
     if (state.playlist && state.currentTrackId === track.id) {
@@ -68,6 +75,8 @@ const TrackList = ({ tracks, ...rest }: TrackListProps) => {
       state.setPlaylist(tracks);
       state.setCurrentTrackId(track.id);
     }
+    console.log(state.audioElement);
+    
     state.audioElement?.play();
   }
 
