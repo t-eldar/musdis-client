@@ -1,0 +1,139 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-container {
+  padding: 0 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.cover {
+  object-fit: cover;
+  border-radius: 2rem;
+  height: 19rem;
+
+  aspect-ratio: 1;
+}
+
+.cover-container {
+  padding: 1rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.background {
+  width: 100%;
+  height: calc(100% + var(--extra-footer-height));
+
+  z-index: -100;
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  overflow: hidden;
+
+  background-size: cover;
+  background-position: center;
+}
+
+.background::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  --alpha-dark-1: color-mix(in srgb, var(--dark), #0000 30%);
+  --alpha-dark-2: color-mix(in srgb, var(--dark), #0000 20%);
+  background: linear-gradient(
+    to bottom,
+    var(--alpha-dark-1) 0%,
+    var(--alpha-dark-2) 100%
+  );
+}
+
+.track-container {
+  padding: 0 3rem;
+}
+
+.title,
+.artists {
+  color: var(--light);
+}
+
+.title {
+  font-size: 3rem;
+}
+
+.artists {
+  font-size: 1.5rem;
+  white-space: nowrap;
+  overflow: scroll;
+  scrollbar-width: none;
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: start;
+  gap: 1rem;
+
+  max-width: 50%;
+}
+
+.info-container h1 {
+  margin: 0;
+}
+
+.tracks-info {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+
+  align-self: flex-end;
+}
+
+.info {
+  text-align: right;
+  color: var(--light);
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.header-bottom {
+  display: flex;
+  justify-content: space-between;
+
+  width: 100%;
+}
+
+.play-button {
+  background-color: rgba(0, 0, 0, 0.1);
+
+  cursor: pointer;
+  width: 5rem;
+  padding: 0.5rem;
+
+  border-radius: 1rem;
+  border: 1px solid var(--accent);
+
+  display: flex;
+  align-items: center;
+  justify-content: start;
+
+  color: var(--accent);
+}
+
+.play-button:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}

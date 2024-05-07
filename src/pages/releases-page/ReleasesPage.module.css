@@ -1,0 +1,37 @@
+.loader {
+  height: 100vh;
+}
+
+.title-container {
+  margin: 3rem;
+}
+
+.title {
+  color: var(--light);
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.load-button {
+  width: 5rem;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  font-weight: 500;
+
+  color: var(--dark);
+
+  background-color: var(--accent);
+  cursor: pointer;
+}
+
+.load-button:hover {
+  background-color: var(--accent-light);
+}
+.load-button:disabled {
+  cursor: not-allowed;
+  background-color: var(--accent);
+}
