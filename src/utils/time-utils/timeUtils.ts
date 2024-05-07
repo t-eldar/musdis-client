@@ -1,6 +1,6 @@
 /**
  * Formats given duration in seconds to MM:SS.
- * 
+ *
  * @param timeInSeconds Time in seconds
  * @returns Time in MM:SS
  */
@@ -15,4 +15,17 @@ export function formatDuration(timeInSeconds: number): string {
     return `${formatMinutes}:${formatSeconds}`;
   }
   return "00:00";
+}
+
+export function formatSeconds(time: number) {
+  const hours = Math.floor(time / 3600);
+  const minutes = Math.floor((time % 3600) / 60);
+
+  if (hours > 0) {
+    return `${hours.toString().padStart(2, "0")}h ${minutes
+      .toString()
+      .padStart(2, "0")}m`;
+  } else {
+    return `${minutes}m`;
+  }
 }
