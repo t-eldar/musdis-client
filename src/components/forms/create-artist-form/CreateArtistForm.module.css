@@ -1,7 +1,12 @@
 .labeled-field {
+  color: var(--light);
+  position: relative;
+
   display: flex;
   align-items: center;
   gap: 1rem;
+
+  width: 100%;
 }
 
 .labeled-field > label {
@@ -13,8 +18,21 @@
 }
 
 .cover-container {
-  border-radius: 1rem;
+  position: relative;
+
+  border-radius: 2rem;
   border: 1px dashed var(--light);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--accent);
+
+  cursor: pointer;
+
+  width: 100%;
+  aspect-ratio: 30 / 9;
 }
 
 .cover {
@@ -22,4 +40,31 @@
   height: 100%;
   object-fit: cover;
   border-radius: inherit;
+}
+
+.cover-error-tip {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+}
+
+.field-error-tip {
+  right: -11rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.field {
+  width: 50%;
+}
+
+.submit-container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 }
