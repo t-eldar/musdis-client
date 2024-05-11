@@ -1,3 +1,4 @@
+import ErrorMessage from "@components/forms/shared/error-message";
 import styles from "./SignInForm.module.css";
 
 import { Button } from "@components/ui/button";
@@ -8,7 +9,6 @@ import { combineClassNames } from "@utils/style-utils";
 import { isAxiosError } from "axios";
 import { ComponentProps, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { FaExclamationCircle } from "react-icons/fa";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -97,10 +97,9 @@ const SignInForm = (props: ComponentProps<"div">) => {
             Sign in
           </Button>
           {errors.root && (
-            <span className={styles.error}>
-              <FaExclamationCircle />
-              {" " + errors.root.message}
-            </span>
+            <ErrorMessage>
+              {errors.root.message || "Something went wrong"}
+            </ErrorMessage>
           )}
         </div>
       </form>
