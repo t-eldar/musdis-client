@@ -1,0 +1,96 @@
+.container {
+  padding: 1rem;
+}
+
+.labeled-field {
+  color: var(--light);
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  width: 100%;
+}
+
+.labeled-field > label,
+.labeled-field > h2 {
+  width: 20%;
+  text-align: end;
+
+  overflow: scroll;
+  scrollbar-width: none;
+}
+
+.field {
+  width: 50%;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.tag-list > li {
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
+
+.tag-list > li:hover {
+  background-color: var(--dark-alt);
+}
+
+.tag-button,
+.selected-tag {
+  background-color: var(--dark-alt);
+  color: var(--light);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+
+  gap: 0.5rem;
+
+  border: 1px solid var(--dark-alt);
+}
+
+.tag-button:hover {
+  background-color: var(--dark);
+  color: var(--light);
+}
+
+.selected-tag-list {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.remove-button {
+  background-color: inherit;
+  padding: 0;
+
+  color: var(--light);
+}
+
+.remove-button:hover {
+  background-color: var(--dark);
+}
+
+.name-field.name-field {
+  font-size: 1.3rem;
+  width: 50%;
+}
+
+.select-file {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
