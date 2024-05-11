@@ -1,22 +1,17 @@
 import styles from "./SignUpForm.module.css";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as Avatar from "@radix-ui/react-avatar";
 
-import { ImageUploader } from "@components/file-uploaders/image-uploader";
+import ErrorMessage from "@components/forms/shared/error-message";
+import ErrorTip from "@components/forms/shared/error-tip";
 import { Button } from "@components/ui/button";
-import { Modal } from "@components/ui/modal";
 import { TextField } from "@components/ui/text-field";
-import { useAwait } from "@hooks/use-await";
 import { useSignUp } from "@hooks/use-sign-up";
-import { uploadFile } from "@services/files";
-import { ComponentProps, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { FaExclamationCircle } from "react-icons/fa";
-import { TbUpload } from "react-icons/tb";
-import { z } from "zod";
 import { combineClassNames } from "@utils/style-utils";
-import ErrorMessage from "@components/error-message";
+import { isAxiosError } from "axios";
+import { ComponentProps } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
 
 const formSchema = z
   .object({
@@ -24,14 +19,11 @@ const formSchema = z
     email: z.string().email(),
     password: z.string(),
     confirmPassword: z.string(),
-    avatarFile: z.object({
-      id: z.string().uuid(),
-      url: z.string().url(),
-    }),
   })
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {
       ctx.addIssue({
+        path: ["confirmPassword"],
         code: z.ZodIssueCode.custom,
         message: "The passwords did not match",
       });
@@ -41,22 +33,13 @@ const formSchema = z
 type FormFields = z.infer<typeof formSchema>;
 
 export const SignUpForm = (props: ComponentProps<"div">) => {
-  const className = props.className;
-  const unstyledProps = { ...props };
-  delete unstyledProps.className;
-
-  const [avatarFile, setAvatarFile] = useState<{ id: string; url: string }>();
-  const [open, setOpen] = useState(false);
-
-  const { promise: uploadImage, error: uploadError } =
-    useAwait<typeof uploadFile>(uploadFile);
+  const { className, ...unstyledProps } = props;
 
   const { invoke: invokeSignUp, error: signUpError } = useSignUp();
 
   const {
     register,
     handleSubmit,
-    setValue,
     setError,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
@@ -68,6 +51,13 @@ export const SignUpForm = (props: ComponentProps<"div">) => {
 
     const result = await invokeSignUp(data);
     if (result === "error") {
+      if (isAxiosError(signUpError) && signUpError.response?.status === 409) {
+        setError("userName", {
+          message: "This username is already taken",
+        });
+
+        return;
+      }
       setError("root", {
         message:
           signUpError?.message ||
@@ -82,27 +72,8 @@ export const SignUpForm = (props: ComponentProps<"div">) => {
     }
   }
 
-  function handleOpenFileUpload() {
-    setOpen(true);
-  }
-
-  async function handleImageSubmit(file: File) {
-    const result = await uploadImage(file);
-    if (result) {
-      setAvatarFile({ id: result.id, url: result.url });
-      setValue("avatarFile", { id: result.id, url: result.url });
-      setOpen(false);
-    }
-  }
-
   return (
     <>
-      <Modal open={open} onOpenChange={setOpen}>
-        <ImageUploader
-          onSubmit={handleImageSubmit}
-          error={uploadError?.message}
-        />
-      </Modal>
       <div
         className={combineClassNames(styles.container, className)}
         {...unstyledProps}
@@ -114,20 +85,6 @@ export const SignUpForm = (props: ComponentProps<"div">) => {
           onKeyDown={(e) => checkKeyDown(e)}
           noValidate
         >
-          <Avatar.Root className={styles["avatar-root"]}>
-            <Avatar.Image
-              className={styles["avatar-image"]}
-              src={avatarFile?.url}
-              alt="Avatar"
-              onClick={handleOpenFileUpload}
-            />
-            <Avatar.Fallback
-              className={styles["avatar-fallback"]}
-              onClick={handleOpenFileUpload}
-            >
-              <TbUpload size={"2rem"} />
-            </Avatar.Fallback>
-          </Avatar.Root>
           <div className={styles["labeled-field"]}>
             <label htmlFor="username">Username</label>
             <TextField
@@ -136,6 +93,12 @@ export const SignUpForm = (props: ComponentProps<"div">) => {
               placeholder="Enter your username."
               {...register("userName")}
             />
+            <ErrorTip
+              open={!!errors.userName}
+              className={styles["error-tip-field"]}
+            >
+              {errors.userName?.message}
+            </ErrorTip>
           </div>
           <div className={styles["labeled-field"]}>
             <label htmlFor="email">Email</label>
@@ -145,6 +108,12 @@ export const SignUpForm = (props: ComponentProps<"div">) => {
               placeholder="Enter your email."
               {...register("email")}
             />
+            <ErrorTip
+              open={!!errors.email}
+              className={styles["error-tip-field"]}
+            >
+              {errors.email?.message}
+            </ErrorTip>
           </div>
           <div className={styles["labeled-field"]}>
             <label htmlFor="password">Password</label>
@@ -163,6 +132,12 @@ export const SignUpForm = (props: ComponentProps<"div">) => {
               placeholder="Confirm your password."
               {...register("confirmPassword")}
             />
+            <ErrorTip
+              open={!!errors.confirmPassword}
+              className={styles["error-tip-field"]}
+            >
+              {errors.confirmPassword?.message}
+            </ErrorTip>
           </div>
           <div className={styles["submit-container"]}>
             <Button type="submit" disabled={isSubmitting}>
@@ -172,7 +147,7 @@ export const SignUpForm = (props: ComponentProps<"div">) => {
         </form>
 
         {errors.root && errors.root.message && (
-          <ErrorMessage message={errors.root.message} />
+          <ErrorMessage>{errors.root.message}</ErrorMessage>
         )}
       </div>
     </>

@@ -62,6 +62,8 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+
+  position: relative;
 }
 
 .labeled-field > label {
@@ -85,4 +87,18 @@
 .submit-container {
   display: flex;
   justify-content: end;
+}
+
+.error-tip-avatar,
+.error-tip-field {
+  right: -11rem;
+}
+
+.error-tip-avatar {
+  top: 2rem;
+}
+
+.avatar-container {
+  width: fit-content;
+  position: relative;
 }
