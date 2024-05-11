@@ -2,13 +2,13 @@ import styles from "./ReleasePage.module.css";
 
 import { ArtistsLinks } from "@components/artists-links";
 import { TrackList } from "@components/lists/track-list";
-import PageLoader from "@components/page-loader";
+import PageLoader from "@components/loaders/page-loader";
 import { Button } from "@components/ui/button";
 import { useFetch } from "@hooks/use-fetch";
 import { getRelease } from "@services/releases";
 import { useAudioStore } from "@stores/audio-store";
 import { formatSeconds } from "@utils/time-utils";
-import { useState } from "react";
+import { CSSProperties, useState } from "react";
 import { TbClock, TbList, TbPlayerPlayFilled } from "react-icons/tb";
 import { useParams } from "react-router-dom";
 
@@ -52,7 +52,7 @@ const ReleasePage = () => {
       <div>
         <div
           className={styles.background}
-          style={{ backgroundImage: `url(${release?.coverUrl})` }}
+          style={{ "--bg-image": `url(${release?.coverUrl})` } as CSSProperties}
         />
         <div className={styles.container}>
           <div className={styles["header-container"]}>

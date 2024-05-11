@@ -1,7 +1,7 @@
 import styles from "./ReleasesPage.module.css";
 
 import { MosaicReleaseList } from "@components/lists/mosaic-release-list";
-import { PageLoader } from "@components/page-loader";
+import { PageLoader } from "@components/loaders/page-loader";
 import { Button } from "@components/ui/button";
 import Separator from "@components/ui/separator";
 import { usePagedFetch } from "@hooks/use-paged-fetch";
