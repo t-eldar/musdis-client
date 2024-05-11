@@ -1,0 +1,14 @@
+.container {
+  position: absolute;
+
+  padding: 0.5rem 1rem;
+
+  border-radius: 1rem;
+  border: 1px solid var(--warning);
+
+  background-color: var(--dark-alt);
+
+  text-wrap: pretty;
+
+  width: 8rem;
+}
