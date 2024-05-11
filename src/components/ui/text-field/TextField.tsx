@@ -1,3 +1,4 @@
+import { combineClassNames } from "@utils/style-utils";
 import styles from "./TextField.module.css";
 
 import { ComponentProps, forwardRef } from "react";
@@ -18,7 +19,15 @@ export type TextFieldRef = HTMLInputElement;
  */
 export const TextField = forwardRef<TextFieldRef, TextFieldProps>(
   (props, ref) => {
-    return <input ref={ref} className={styles.input} {...props} />;
+    const { className, ...rest } = props;
+
+    return (
+      <input
+        ref={ref}
+        className={combineClassNames(styles.input, className)}
+        {...rest}
+      />
+    );
   }
 );
 
