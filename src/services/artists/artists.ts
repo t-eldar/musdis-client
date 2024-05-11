@@ -29,15 +29,19 @@ type CreateArtistRequest = {
     id: string;
     url: string;
   };
-  userIds: string[];
+  userIds?: string[];
 };
 export async function createArtist(
   request: CreateArtistRequest,
   abortSignal?: AbortSignal
 ): Promise<Artist> {
-  const result = await apiClient.post("music-service/artists", request, {
-    signal: abortSignal,
-  });
+  const result = await apiClient.post(
+    "music-service/artists",
+    { ...request, userIds: request.userIds ? request.userIds : [] },
+    {
+      signal: abortSignal,
+    }
+  );
 
   return await artistSchema.parseAsync(result.data);
 }
@@ -92,4 +96,23 @@ export async function getArtists(
   );
 
   return await pagedDataResponseSchema.parseAsync(result.data);
+}
+
+export async function getUserArtists(
+  userId: string,
+  abortSignal?: AbortSignal
+): Promise<Artist[]> {
+  const result = await apiClient.get<PagedDataResponse<Artist>>(
+    "music-service/artists",
+    {
+      signal: abortSignal,
+      params: {
+        userIds: userId,
+        sort: "name",
+        sortOrder: "asc",
+      },
+    }
+  );
+
+  return await artistSchema.array().parseAsync(result.data.data);
 }

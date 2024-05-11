@@ -22,20 +22,42 @@ export async function signIn(
     signal: abortSignal,
   });
 
-  return userSchema.parse(result.data);
+  return await userSchema.parseAsync(result.data);
 }
 
 export type SignUpRequest = {
   userName: string;
-  avatarFile: {
-    id: string;
-    url: string;
-  };
   email: string;
   password: string;
 };
 export async function signUp(request: SignUpRequest): Promise<User> {
   const result = await apiClient.post("identity-service/sign-up", request);
 
-  return userSchema.parse(result.data);
+  return await userSchema.parseAsync(result.data);
+}
+
+export async function getUserInfo(abortSignal?: AbortSignal): Promise<User> {
+  const result = await apiClient.get("identity-service/user", {
+    signal: abortSignal,
+  });
+
+  return await userSchema.parseAsync(result.data.data);
+}
+
+type UpdateUserRequest = {
+  avatarFile: {
+    id: string;
+    url: string;
+  };
+};
+
+export async function updateUser(
+  request: UpdateUserRequest,
+  abortSignal?: AbortSignal
+) {
+  const result = await apiClient.patch("/identity-service/users/", request, {
+    signal: abortSignal,
+  });
+
+  return result.status === 204 ? "success" : "error";
 }

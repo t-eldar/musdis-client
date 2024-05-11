@@ -5,6 +5,7 @@ import {
 } from "@app-types/responses";
 import { artistSchema } from "@services/artists";
 import { apiClient } from "@services/base";
+import { FileDetails } from "@services/files";
 import { releaseTypeSchema } from "@services/release-types";
 import { trackSchema } from "@services/tracks";
 import { z } from "zod";
@@ -74,4 +75,44 @@ export async function getArtistReleases(
   );
 
   return await releaseSchema.array().parseAsync(result.data.data);
+}
+
+export async function getUserReleases(
+  userId: string,
+  abortSignal?: AbortSignal
+): Promise<Release[]> {
+  const result = await apiClient.get<PagedDataResponse<Release>>(
+    "music-service/releases",
+    {
+      signal: abortSignal,
+      params: {
+        sort: "releaseDate",
+        sortOrder: "desc",
+        userIds: userId,
+      },
+    }
+  );
+
+  return await releaseSchema.array().parseAsync(result.data.data);
+}
+
+type CreateReleaseRequest = {
+  name: string;
+  releaseTypeSlug: string;
+  coverFile: FileDetails;
+  tracks: {
+    title: string;
+    audioFile: FileDetails;
+    tagSlugs: string[];
+  };
+};
+export async function createRelease(
+  request: CreateReleaseRequest
+): Promise<Release> {
+  const result = await apiClient.post<DataResponse<Release>>(
+    "/music-service/releases",
+    request
+  );
+
+  return await releaseSchema.parseAsync(result.data.data);
 }
