@@ -48,9 +48,6 @@ export const ImageUploader = ({
   }
 
   async function handleSubmit() {
-
-    console.log("submitted");
-    
     if (acceptedFile && preview) {
       if (onSubmit instanceof Promise) {
         await onSubmit(acceptedFile, preview as string);

@@ -1,5 +1,4 @@
-import ArtistList from "@components/lists/artist-list";
-import MosaicReleaseList from "@components/lists/mosaic-release-list";
+import CreateReleaseForm from "@components/forms/create-release-form";
 
 /**
  * Page for testing components in isolation.
@@ -13,23 +12,11 @@ const SandboxPage = () => {
 
     return arr;
   }
-  const artists = createArray(
-    {
-      id: "string",
-      slug: "string",
-      name: "string",
-      type: {
-        name: "Musician",
-        slug: "musician"
-      },
-      coverUrl:
-        "https://storage.googleapis.com/musdis-6b5bf.appspot.com/image/e761cb91-925f-410e-b5a0-8efedf61e6a8.jpg",
-    },
-    20
-  );
+
   return (
     <>
-      <ArtistList artists={artists} />
+      <CreateReleaseForm />
+      {/* <AudioUploader onSubmit={() => {}} /> */}
     </>
   );
 };
