@@ -1,0 +1,13 @@
+.list {
+  all: unset;
+  display: flex;
+  flex-direction: column;
+
+  color: var(--light);
+}
+
+.item {
+  all: unset;
+  display: flex;
+  align-items: center;
+}
