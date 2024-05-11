@@ -1,7 +1,7 @@
 import styles from "./ArtistsPage.module.css";
 
 import { ArtistList } from "@components/lists/artist-list";
-import { PageLoader } from "@components/page-loader";
+import { PageLoader } from "@components/loaders/page-loader";
 import { usePagedFetch } from "@hooks/use-paged-fetch";
 import { Separator } from "@components/ui/separator";
 import { getArtists } from "@services/artists";
@@ -39,7 +39,7 @@ const ArtistsPage = () => {
   }
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1 className={styles.title}>Artists</h1>
       <ArtistList artists={artists} />
       <Separator />

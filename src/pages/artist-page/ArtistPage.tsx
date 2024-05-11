@@ -1,8 +1,8 @@
-import Loader from "@components/loader";
+import Loader from "@components/loaders/loader";
 import styles from "./ArtistPage.module.css";
 
 import { ReleaseList } from "@components/lists/release-list";
-import PageLoader from "@components/page-loader";
+import PageLoader from "@components/loaders/page-loader";
 import { useFetch } from "@hooks/use-fetch";
 import * as Tabs from "@radix-ui/react-tabs";
 import { getArtist, getUsedReleaseTypes } from "@services/artists";
@@ -111,60 +111,64 @@ const ArtistPage = () => {
       </div>
 
       <div className={styles["tabs-container"]}>
-        <Tabs.Root defaultValue="releases">
-          <Tabs.List
-            className={styles["tabs-list"]}
-            aria-label="Choose release type"
-          >
-            <Tabs.Trigger
-              defaultChecked
-              className={styles["tabs-trigger"]}
-              value="releases"
-              onClick={() =>
-                setType({
-                  name: "Latest release",
-                  slug: "",
-                })
-              }
+        {releases?.length === 0 ? (
+          <h1 className={styles.title}>No releases yet</h1>
+        ) : (
+          <Tabs.Root defaultValue="releases">
+            <Tabs.List
+              className={styles["tabs-list"]}
+              aria-label="Choose release type"
             >
-              Latest releases
-            </Tabs.Trigger>
-            {isReleaseTypesLoading ? (
               <Tabs.Trigger
-                className={combineClassNames(
-                  styles["tabs-trigger"],
-                  styles["disabled"]
-                )}
-                value={"releases"}
+                defaultChecked
+                className={styles["tabs-trigger"]}
+                value="releases"
+                onClick={() =>
+                  setType({
+                    name: "Latest release",
+                    slug: "",
+                  })
+                }
               >
-                <Loader size={20} />
+                Latest releases
               </Tabs.Trigger>
-            ) : (
-              releaseTypes?.map((rt) => (
+              {isReleaseTypesLoading ? (
                 <Tabs.Trigger
-                  className={styles["tabs-trigger"]}
-                  key={rt.id}
+                  className={combineClassNames(
+                    styles["tabs-trigger"],
+                    styles["disabled"]
+                  )}
                   value={"releases"}
-                  onClick={() => setType(rt)}
                 >
-                  {rt.name}s
+                  <Loader size={20} />
                 </Tabs.Trigger>
-              ))
-            )}
-          </Tabs.List>
-          <Tabs.Content value="releases">
-            {isReleasesLoading ? (
-              <Loader className={styles.loader} />
-            ) : releasesError && !isCancelledError(releasesError) ? (
-              <h1 className={styles.title}>Artist has no releases yet</h1>
-            ) : (
-              <div>
-                <h1 className={styles.title}>{type.name}s</h1>
-                <ReleaseList releases={releases || []} />
-              </div>
-            )}
-          </Tabs.Content>
-        </Tabs.Root>
+              ) : (
+                releaseTypes?.map((rt) => (
+                  <Tabs.Trigger
+                    className={styles["tabs-trigger"]}
+                    key={rt.id}
+                    value={"releases"}
+                    onClick={() => setType(rt)}
+                  >
+                    {rt.name}s
+                  </Tabs.Trigger>
+                ))
+              )}
+            </Tabs.List>
+            <Tabs.Content value="releases">
+              {isReleasesLoading ? (
+                <Loader className={styles.loader} />
+              ) : releasesError && !isCancelledError(releasesError) ? (
+                <h1 className={styles.title}>Artist has no releases yet</h1>
+              ) : (
+                <div>
+                  <h1 className={styles.title}>{type.name}s</h1>
+                  <ReleaseList releases={releases || []} />
+                </div>
+              )}
+            </Tabs.Content>
+          </Tabs.Root>
+        )}
       </div>
     </>
   );
