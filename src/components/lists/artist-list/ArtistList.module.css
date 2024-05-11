@@ -37,6 +37,10 @@
   font-size: 2rem;
   margin: 0;
   font-weight: 500;
+
+  overflow: scroll;
+  scrollbar-width: none;
+  white-space: nowrap;
 }
 
 .info {
