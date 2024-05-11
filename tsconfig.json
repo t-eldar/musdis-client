@@ -30,6 +30,7 @@
       "@services/*": ["src/services/*"],
       "@stores/*": ["src/stores/*"],
       "@hooks/*": ["src/hooks/*"],
+      "@hoc/*": ["src/hoc/*"],
       "@app-types/*": ["src/types/*"], // cannot use @types as alias because its referred as types from node_modules
       "@public/*": ["public/*"],
       "@/*": ["./src/*", "./dist/*", ""]
