@@ -11,6 +11,7 @@ type AudioPlayerOverlayProps = {
 const AudioPlayerOverlay = ({ onActiveChange }: AudioPlayerOverlayProps) => {
   const playlist = useAudioStore((state) => state.playlist);
   const trackId = useAudioStore((state) => state.currentTrackId);
+  const setTrackId = useAudioStore((state) => state.setCurrentTrackId);
   const audioElement = useAudioStore((state) => state.audioElement);
 
   const [isActive, setIsActive] = useState(false);
@@ -52,9 +53,9 @@ const AudioPlayerOverlay = ({ onActiveChange }: AudioPlayerOverlayProps) => {
     }
     const index = playlist.findIndex((t) => t.id === trackId);
     if (index < playlist.length - 1) {
-      setTrack(playlist[index + 1]);
+      setTrackId(playlist[index + 1].id);
     } else {
-      setTrack(playlist[0]);
+      setTrackId(playlist[0].id);
     }
   }
   function handlePrevious() {
@@ -62,10 +63,10 @@ const AudioPlayerOverlay = ({ onActiveChange }: AudioPlayerOverlayProps) => {
       return;
     }
     const index = playlist.findIndex((t) => t.id === trackId);
-    if (index > 1) {
-      setTrack(playlist[index - 1]);
+    if (index > 0) {
+      setTrackId(playlist[index - 1].id);
     } else {
-      setTrack(playlist[playlist.length - 1]);
+      setTrackId(playlist[playlist.length - 1].id);
     }
   }
 
