@@ -1,3 +1,4 @@
+import { ErrorTip } from "@components/forms/shared/error-tip";
 import styles from "./TrackRow.module.css";
 
 import { AudioUploader } from "@components/file-uploaders/audio-uploader";
@@ -9,38 +10,34 @@ import { useAwait } from "@hooks/use-await";
 import { uploadFile } from "@services/files";
 import { combineClassNames } from "@utils/style-utils";
 import { useEffect, useState } from "react";
-import { PiVinylRecordFill } from "react-icons/pi";
-import { TbMinus, TbPlus } from "react-icons/tb";
+import { UseFormRegisterReturn } from "react-hook-form";
+import { TbFileMusic, TbMinus, TbPlus } from "react-icons/tb";
 
 type TrackRowProps = {
   tags: { name: string; slug: string }[];
-  keyValue: string;
-  onTrackChange: (
-    key: string,
-    track: {
-      title: string;
-      audioFile: {
-        id: string;
-        url: string;
-      };
-      tagSlugs: string[];
-    }
-  ) => void;
+  keyValue: number;
+  onAudioFileChange: (file: { id: string; url: string }) => void;
+  errors?: {
+    title?: { message?: string };
+    audioFile?: { message?: string };
+  };
+
+  onSelectedTagsChange: (tags: { name: string; slug: string }[]) => void;
+  registerTitle: () => UseFormRegisterReturn<`tracks.${number}.title`>;
   className?: string;
 };
 
 const TrackRow = ({
   keyValue,
-  onTrackChange,
+  onAudioFileChange,
+  onSelectedTagsChange,
   tags,
+  errors,
   className,
+  registerTitle,
 }: TrackRowProps) => {
   const [fileName, setFileName] = useState("");
-  const [title, setTitle] = useState("");
-  const [audioFile, setAudioFile] = useState<{
-    id: string;
-    url: string;
-  }>();
+
   const [selectedTags, setSelectedTags] = useState<
     {
       name: string;
@@ -58,20 +55,14 @@ const TrackRow = ({
   );
 
   useEffect(() => {
-    if (audioFile && title && selectedTags) {
-      onTrackChange(keyValue, {
-        title,
-        audioFile,
-        tagSlugs: selectedTags.map((t) => t.slug),
-      });
-    }
-  }, [audioFile, title, onTrackChange, selectedTags, keyValue]);
+    onSelectedTagsChange(selectedTags);
+  }, [selectedTags, onSelectedTagsChange]);
 
   async function handleFileSubmit(file: File) {
     const result = await upload(file);
     if (result) {
       setIsFileModalOpen(false);
-      setAudioFile(result);
+      onAudioFileChange(result);
     }
   }
 
@@ -105,19 +96,25 @@ const TrackRow = ({
       </Modal>
       <div className={styles["labeled-field"]}>
         <label htmlFor={`track-title-${keyValue}`}>
-          <h2>Title</h2>
+          <h3>Title</h3>
         </label>
         <TextField
           id={`track-title-${keyValue}`}
           type="text"
-          value={title}
+          {...registerTitle()}
+          // value={title}
           className={styles["name-field"]}
-          onChange={(e) => setTitle(e.target.value)}
+          // onChange={(e) => setTitle(e.target.value)}
           placeholder="Enter the title of the track"
         />
+        <ErrorTip open={!!errors?.title} className={styles["field-error-tip"]}>
+          {errors?.title?.message}
+        </ErrorTip>
       </div>
       <div className={styles["labeled-field"]}>
-        <h2>Tags</h2>
+        <label>
+          <h3>Tags</h3>
+        </label>
         <div className={styles["selected-tag-list"]}>
           {selectedTags.map((tag) => (
             <div key={tag.slug} className={styles["selected-tag"]}>
@@ -140,17 +137,25 @@ const TrackRow = ({
         </div>
       </div>
       <div className={styles["labeled-field"]}>
-        <h2>File</h2>
+        <label>
+          <h3>File</h3>
+        </label>
         <div className={styles["select-file"]}>
           <Button
             className={styles.button}
             onClick={() => setIsFileModalOpen(true)}
           >
-            <PiVinylRecordFill />
-            {audioFile ? "Change file" : "Choose file"}
+            <TbFileMusic />
+            Choose file
           </Button>
           {fileName || "File is not chosen yet."}
         </div>
+        <ErrorTip
+          open={!!errors?.audioFile}
+          className={styles["field-error-tip"]}
+        >
+          {errors?.audioFile?.message}
+        </ErrorTip>
       </div>
     </div>
   );

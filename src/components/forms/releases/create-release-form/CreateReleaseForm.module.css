@@ -1,3 +1,10 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -6,9 +13,19 @@
   width: 100%;
 }
 
+.title {
+  color: var(--light);
+  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
 .name-field.name-field {
   width: 50%;
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 
 .labeled-field {
@@ -27,11 +44,6 @@
   margin-bottom: 0.5rem;
 }
 
-.title {
-  width: 25%;
-  text-align: right;
-}
-
 .labeled-field > label {
   width: 25%;
   text-align: end;
@@ -44,18 +56,21 @@
   width: 50%;
 }
 
-.cover-error-tip,
 .field-error-tip {
-  right: -11rem;
+  right: 1rem;
+}
+
+.field-error-tip.field-error-tip,
+.cover-error-tip.cover-error-tip {
+  border-radius: 0.5rem;
 }
 
 .cover-error-tip {
-  top: 2rem;
+  left: calc(12rem + 25%);
+  top: 3.5rem;
 }
 
 .cover-container {
-  position: relative;
-
   border-radius: 2rem;
   border: 1px dashed var(--light);
 
@@ -115,4 +130,10 @@
 
 .relative {
   position: relative;
+}
+
+.track-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }

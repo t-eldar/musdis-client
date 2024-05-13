@@ -13,8 +13,7 @@
   width: 100%;
 }
 
-.labeled-field > label,
-.labeled-field > h2 {
+.labeled-field > label {
   width: 20%;
   text-align: end;
 
@@ -65,7 +64,7 @@
 }
 
 .selected-tag-list {
-  width: 100%;
+  width: 75%;
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -83,14 +82,19 @@
 }
 
 .name-field.name-field {
-  font-size: 1.3rem;
+  font-size: 1rem;
   width: 50%;
 }
 
 .select-file {
-  width: 100%;
+  width: 75%;
 
   display: flex;
   align-items: center;
   gap: 2rem;
+}
+
+.field-error-tip {
+  border-radius: 0.5rem;
+  right: 1rem;
 }

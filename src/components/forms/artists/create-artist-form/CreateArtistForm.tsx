@@ -1,26 +1,26 @@
 import styles from "./CreateArtistForm.module.css";
 
 import { ImageUploader } from "@components/file-uploaders/image-uploader";
-import ErrorMessage from "@components/forms/shared/error-message";
 import ErrorTip from "@components/forms/shared/error-tip";
 import { Button } from "@components/ui/button";
 import { Modal } from "@components/ui/modal";
 import Select from "@components/ui/select";
 import { TextField } from "@components/ui/text-field";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useAlert from "@hooks/use-alert";
 import { useAwait } from "@hooks/use-await";
 import { useFetch } from "@hooks/use-fetch";
 import { getArtistTypes } from "@services/artist-types";
 import { createArtist } from "@services/artists";
 import { uploadFile } from "@services/files";
 import { isAxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { TbFileUpload } from "react-icons/tb";
+import { TbFileUpload, TbUsers } from "react-icons/tb";
 import { z } from "zod";
 
 const formSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1),
   artistTypeSlug: z.string(),
   coverFile: z.object(
     {
@@ -40,11 +40,7 @@ type CreateArtistFormProps = {
 };
 
 const CreateArtistForm = ({ onCreated }: CreateArtistFormProps) => {
-  const {
-    data: artistTypes,
-    isLoading: isArtistTypesLoading,
-    error: artistTypesError,
-  } = useFetch(async (signal) => {
+  const { data: artistTypes } = useFetch(async (signal) => {
     return await getArtistTypes(signal);
   });
 
@@ -66,15 +62,12 @@ const CreateArtistForm = ({ onCreated }: CreateArtistFormProps) => {
     error: uploadError,
   } = useAwait<typeof uploadFile>(uploadFile);
 
-  const {
-    promise: invokeCreateArtist,
-    isLoading: isCreateLoading,
-    error: createError,
-  } = useAwait(createArtist);
+  const { promise: invokeCreateArtist, error: createError } =
+    useAwait(createArtist);
 
-  async function onSubmit(data: FormFields) {
-    const result = await invokeCreateArtist(data);
+  const alert = useAlert();
 
+  useEffect(() => {
     if (isAxiosError(createError) && createError.response?.status === 409) {
       setError("name", {
         message: "The artist with this name already exists.",
@@ -82,12 +75,27 @@ const CreateArtistForm = ({ onCreated }: CreateArtistFormProps) => {
 
       return;
     }
+
     if (createError) {
       setError("root", { message: createError.message });
+      alert({
+        variant: "warning",
+        title: "Error creating artist",
+        message: createError.message,
+      });
     }
+  }, [createError, alert, setError]);
+
+  async function onSubmit(data: FormFields) {
+    const result = await invokeCreateArtist(data);
 
     if (result) {
       onCreated?.();
+      alert({
+        variant: "success",
+        title: "Artist created",
+        message: "Your artist has been created successfully",
+      });
     }
   }
 
@@ -121,7 +129,7 @@ const CreateArtistForm = ({ onCreated }: CreateArtistFormProps) => {
         onKeyDown={(e) => checkKeyDown(e)}
         noValidate
       >
-        <div>
+        <div className={styles["cover-container-wrapper"]}>
           <div
             className={styles["cover-container"]}
             onClick={() => setIsFileUploaderOpen(true)}
@@ -144,23 +152,29 @@ const CreateArtistForm = ({ onCreated }: CreateArtistFormProps) => {
           </div>
         </div>
         <div className={styles["labeled-field"]}>
-          <label htmlFor="artist-name">Name</label>
-          <TextField
-            className={styles.field}
-            id="artist-name"
-            type="text"
-            placeholder="Enter the name of the artist"
-            {...register("name")}
-          />
-          <ErrorTip
-            open={!!errors.name}
-            className={styles["field-error-tip"]}
-          >
+          <label htmlFor="artist-name">
+            <h3>Name</h3>
+          </label>
+          <div className={styles["field-container"]}>
+            <TextField
+              id="artist-name"
+              type="text"
+              placeholder="Enter the name of the artist"
+              className={styles.field}
+              {...register("name")}
+            />
+          </div>
+          <ErrorTip open={!!errors.name} className={styles["field-error-tip"]}>
             {errors.name?.message}
           </ErrorTip>
         </div>
         <div className={styles["labeled-field"]}>
-          <label htmlFor="artist-type">Type</label>
+          <label htmlFor="artist-type">
+            <div className={styles.title}>
+              <TbUsers />
+              <h3>Type</h3>
+            </div>
+          </label>
           <Select.Root
             placeholder="Select artist type"
             onValueChange={(val) => setValue("artistTypeSlug", val)}
@@ -175,8 +189,13 @@ const CreateArtistForm = ({ onCreated }: CreateArtistFormProps) => {
               ))
             )}
           </Select.Root>
+          <ErrorTip
+            open={!!errors.artistTypeSlug}
+            className={styles["field-error-tip"]}
+          >
+            {errors.artistTypeSlug?.message}
+          </ErrorTip>
         </div>
-        {errors.root && <ErrorMessage>{errors.root.message}</ErrorMessage>}
         <div className={styles["submit-container"]}>
           <Button disabled={isSubmitting}>Create</Button>
         </div>
