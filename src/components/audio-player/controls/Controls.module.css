@@ -10,12 +10,14 @@
   min-width: 270px;
 }
 
-.skip-button{
+.skip-button.skip-button{
   color: var(--light);
+
+  background-color: transparent;
 }
 
-.skip-button,
-.play-button {
+.skip-button.skip-button,
+.play-button.play-button {
   padding: 0;
   cursor: pointer;
 
@@ -33,12 +35,12 @@
   border-radius: 1rem;
 }
 
-.play-button {
+.play-button.play-button {
   background-color: var(--accent);
   border-radius: 100%;
 }
 
-.play-button.playing {
+.play-button.play-button.playing {
   box-shadow: 0 0 120px var(--accent);
 }
 
