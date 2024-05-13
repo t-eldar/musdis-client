@@ -1,25 +1,30 @@
 import { useAuthStore } from "@stores/auth-store";
 import styles from "./ProfilePage.module.css";
 
-import * as Avatar from "@radix-ui/react-avatar";
-import Modal from "@components/ui/modal";
-import { useState } from "react";
-import ImageUploader from "@components/file-uploaders/image-uploader";
-import { uploadFile } from "@services/files";
+import { ImageUploader } from "@components/file-uploaders/image-uploader";
+import { ArtistList } from "@components/lists/artist-list";
+import { ReleaseList } from "@components/lists/release-list";
+import { Modal } from "@components/ui/modal";
 import { useAwait } from "@hooks/use-await";
-import { getUserInfo, updateUser } from "@services/authentication";
-import ReleaseList from "@components/lists/release-list";
-import useFetch from "@hooks/use-fetch";
-import { getUserReleases } from "@services/releases";
-import ArtistList from "@components/lists/artist-list";
+import { useFetch } from "@hooks/use-fetch";
 import { getUserArtists } from "@services/artists";
+import { getUserInfo, updateUser } from "@services/authentication";
+import { uploadFile } from "@services/files";
+import { getUserReleases } from "@services/releases";
+import { combineClassNames } from "@utils/style-utils";
+import { useState } from "react";
 import {
   TbDeviceAudioTape,
   TbMusic,
   TbPencil,
   TbWaveSquare,
 } from "react-icons/tb";
-import { combineClassNames } from "@utils/style-utils";
+
+import { Loader } from "@components/loaders/loader";
+import Button from "@components/ui/button";
+import * as Avatar from "@radix-ui/react-avatar";
+import { FaGuitar } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const user = useAuthStore((state) => state.user);
@@ -28,28 +33,22 @@ const ProfilePage = () => {
 
   const [isEditHover, setIsEditHover] = useState(false);
 
+  const navigate = useNavigate();
+
   const { promise: uploadImage, error: uploadError } =
     useAwait<typeof uploadFile>(uploadFile);
 
   const { promise: editProfile, error: editError } = useAwait(updateUser);
-  const { promise: getUser, error: userError } = useAwait(getUserInfo);
+  const { promise: getUser } = useAwait(getUserInfo);
 
-  const {
-    data: releases,
-    error: releasesError,
-    isLoading: releasesLoading,
-  } = useFetch(
+  const { data: releases } = useFetch(
     async (signal) => {
       return await getUserReleases(user?.id || "", signal);
     },
     [user]
   );
 
-  const {
-    data: artists,
-    error: artistsError,
-    isLoading: artistsLoading,
-  } = useFetch(
+  const { data: artists, isLoading: isArtistsLoading } = useFetch(
     async (signal) => {
       return await getUserArtists(user?.id || "", signal);
     },
@@ -67,6 +66,10 @@ const ProfilePage = () => {
 
       setIsModalOpen(false);
     }
+  }
+
+  function handleCreateArtistClick() {
+    navigate("/artists/create-artist");
   }
 
   return (
@@ -116,20 +119,45 @@ const ProfilePage = () => {
           </div>
         </div>
         <div className={styles["list-container"]}>
-          <div className={styles["artists"]}>
-            <div className={styles["list-info"]}>
-              <TbWaveSquare size={"2rem"} />
-              <h2>User artists</h2>
-            </div>
-            {artists && <ArtistList artists={artists} />}
+          <div className={styles["list-content"]}>
+            {isArtistsLoading ? (
+              <Loader />
+            ) : artists && artists.length === 0 ? (
+              <div className={styles["no-artists-container"]}>
+                <Button
+                  className={styles["create-artist-button"]}
+                  onClick={handleCreateArtistClick}
+                >
+                  <FaGuitar />
+                  Create your first artist
+                </Button>
+              </div>
+            ) : (
+              <>
+                <div className={styles["list-info"]}>
+                  <TbWaveSquare size={"2rem"} />
+                  <h2>Your artists</h2>
+                  <Button
+                    className={styles["create-artist-button"]}
+                    onClick={handleCreateArtistClick}
+                  >
+                    <FaGuitar />
+                    Add new artist
+                  </Button>
+                </div>
+                {artists && <ArtistList artists={artists} />}
+              </>
+            )}
           </div>
-          <div className={styles.releases}>
-            <div className={styles["list-info"]}>
-              <TbDeviceAudioTape size={"2rem"} />
-              <h2>User releases</h2>
+          {releases && releases.length !== 0 && (
+            <div className={styles["list-content"]}>
+              <div className={styles["list-info"]}>
+                <TbDeviceAudioTape size={"2rem"} />
+                <h2>User releases</h2>
+              </div>
+              <ReleaseList releases={releases} />
             </div>
-            {releases && <ReleaseList releases={releases} />}
-          </div>
+          )}
         </div>
       </div>
     </>
