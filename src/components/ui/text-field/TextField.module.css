@@ -1,4 +1,5 @@
 .input {
+  box-sizing: border-box;
   border: none;
   border-radius: 0.6rem;
   background-color: var(--dark-alt);
@@ -29,11 +30,11 @@
 }
 
 .input:-webkit-autofill,
-.input:-webkit-autofill:hover, 
-.input:-webkit-autofill:focus, 
-.input:-webkit-autofill:active{
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: var(--light);
-    transition: background-color 5000s ease-in-out 0s;
-    box-shadow: inset 0 0 20px 20px var(--dark-alt);
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: var(--light);
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px var(--dark-alt);
 }

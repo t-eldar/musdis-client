@@ -15,11 +15,9 @@
   background-color: var(--dark-alt);
 }
 
-.item:hover {
-  cursor: pointer;
-}
-
 .item {
+  cursor: pointer;
+
   width: 2rem;
   text-decoration: none;
 
@@ -30,13 +28,15 @@
   white-space: nowrap;
   overflow: scroll;
   scrollbar-width: none;
-}
-
-.item > * {
-  text-decoration: none;
   color: var(--grey);
+  text-decoration: none;
 }
 
-.item > button {
+.item:hover {
+  color: var(--accent);
+}
+
+button.item {
+  padding: 0;
   background-color: var(--dark-alt);
 }

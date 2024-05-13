@@ -26,6 +26,7 @@ const Select = ({ placeholder, children, ...rest }: SelectProps) => {
               <RxSelect.Label className={styles.label}>
                 {placeholder}
               </RxSelect.Label>
+              <RxSelect.Separator className={styles.separator} />
               {children}
             </RxSelect.Group>
           </RxSelect.Viewport>
