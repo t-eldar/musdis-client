@@ -32,7 +32,11 @@ const formSchema = z
 
 type FormFields = z.infer<typeof formSchema>;
 
-export const SignUpForm = (props: ComponentProps<"div">) => {
+type SignUpFormProps = ComponentProps<"div"> & {
+  onSuccess?: () => void;
+};
+
+export const SignUpForm = ({ onSuccess, ...props }: SignUpFormProps) => {
   const { className, ...unstyledProps } = props;
 
   const { invoke: invokeSignUp, error: signUpError } = useSignUp();
@@ -63,6 +67,8 @@ export const SignUpForm = (props: ComponentProps<"div">) => {
           signUpError?.message ||
           "Something went wrong. Please try again later.",
       });
+    } else {
+      onSuccess?.();
     }
   };
 

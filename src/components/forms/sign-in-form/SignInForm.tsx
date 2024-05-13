@@ -18,7 +18,11 @@ const formSchema = z.object({
 
 type FormFields = z.infer<typeof formSchema>;
 
-const SignInForm = (props: ComponentProps<"div">) => {
+type SignInFormProps = ComponentProps<"div"> & {
+  onSuccess?: () => void;
+};
+
+const SignInForm = ({ onSuccess, ...props }: SignInFormProps) => {
   const className = props.className;
   const unstyledProps = { ...props };
   delete unstyledProps.className;
@@ -50,6 +54,7 @@ const SignInForm = (props: ComponentProps<"div">) => {
     const result = await invokeSignIn(data);
     if (result === "success") {
       clearErrors();
+      onSuccess?.();
     }
   };
 
