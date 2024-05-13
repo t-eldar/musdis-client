@@ -1,9 +1,11 @@
 import styles from "./Layout.module.css";
 
 import { AudioPlayerOverlay } from "@components/audio-player-overlay";
-import Navbar from "@components/navbar";
+import PageLoader from "@components/loaders/page-loader";
+import { Navbar } from "@components/navbar";
 import { NavbarItem } from "@components/navbar/Navbar";
-import { useState } from "react";
+import { Alert } from "@components/ui/alert";
+import { Suspense, useState } from "react";
 import { Outlet } from "react-router-dom";
 
 type LayoutProps = {
@@ -12,6 +14,7 @@ type LayoutProps = {
 
 const Layout = ({ navbarItems }: LayoutProps) => {
   const [isOverlayActive, setIsOverlayActive] = useState(false);
+
   return (
     <div className={styles.container}>
       <div className={styles.navbar}>
@@ -19,7 +22,10 @@ const Layout = ({ navbarItems }: LayoutProps) => {
       </div>
 
       <div className={styles.content}>
-        <Outlet />
+        <Suspense fallback={<PageLoader />}>
+          <Outlet />
+        </Suspense>
+        <Alert />
         {isOverlayActive && <div className={styles["extra-footer"]} />}
       </div>
 

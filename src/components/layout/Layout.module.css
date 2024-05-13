@@ -9,7 +9,6 @@
 .container {
   display: grid;
   grid-template-columns: min-content auto;
-  grid-gap: 0.5rem;
 
   background-color: var(--dark);
 }
@@ -22,14 +21,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  z-index: 1;
 }
 
 .content {
   border-radius: 2rem;
-
-  z-index: 0;
 
   background-color: var(--background-dark);
   height: 100vh;

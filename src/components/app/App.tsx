@@ -1,21 +1,36 @@
 import "@styles/variables.css";
 
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Layout } from "@components/layout";
-import { SandboxPage } from "@pages/sandbox";
-import { ReleasePage } from "@pages/release-page";
-import { ReleasesPage } from "@pages/releases-page";
-import { ArtistsPage } from "@pages/artists-page";
-import { ArtistPage } from "@pages/artist-page";
 import { NavbarItem } from "@components/navbar/Navbar";
-import { TbHome, TbUser } from "react-icons/tb";
-import { SignInPage } from "@pages/sign-in-page";
-import SignUpPage from "@pages/sign-up-page";
-import { ProfilePage } from "@pages/profile-page";
-import withUser from "@hoc/with-user";
-import WithUser from "@components/wrappers/with-user";
+import { RequireAuthorization } from "@components/wrappers/require-authorization";
+import { WithUser } from "@components/wrappers/with-user";
+import { TbBrandCodesandbox, TbHome, TbLogout, TbUser } from "react-icons/tb";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+
+import * as Toast from "@radix-ui/react-toast";
+import { lazy } from "react";
+import useSignOut from "@hooks/use-sign-out";
+
+const ArtistPage = lazy(() => import("@pages/artists/artist-page"));
+const ArtistsPage = lazy(() => import("@pages/artists/artists-page"));
+const CreateArtistPage = lazy(
+  () => import("@pages/artists/create-artist-page")
+);
+const CreateReleasePage = lazy(
+  () => import("@pages/releases/create-release-page")
+);
+const ProfilePage = lazy(() => import("@pages/profile-page"));
+const ReleasePage = lazy(() => import("@pages/releases/release-page"));
+const ReleasesPage = lazy(() => import("@pages/releases/releases-page"));
+const SandboxPage = lazy(() => import("@pages/sandbox"));
+const SignInPage = lazy(() => import("@pages/sign-in-page"));
+const SignUpPage = lazy(() => import("@pages/sign-up-page"));
+const UpdateArtistPage = lazy(
+  () => import("@pages/artists/update-artist-page")
+);
 
 const App = () => {
+  const signOut = useSignOut();
   const navbarItems: NavbarItem[] = [
     {
       icon: <TbHome />,
@@ -24,6 +39,14 @@ const App = () => {
     {
       icon: <TbUser />,
       link: "/profile",
+    },
+    {
+      icon: <TbBrandCodesandbox />,
+      link: "/sandbox",
+    },
+    {
+      icon: <TbLogout />,
+      onClick: () => signOut(),
     },
   ];
   const router = createBrowserRouter([
@@ -41,22 +64,54 @@ const App = () => {
 
         { path: "/sign-in", element: <SignInPage /> },
         { path: "/sign-up", element: <SignUpPage /> },
-        { path: "/profile", element: <ProfilePage /> },
+        {
+          path: "/profile",
+          element: (
+            <RequireAuthorization>
+              <ProfilePage />
+            </RequireAuthorization>
+          ),
+        },
 
         { path: "/releases", element: <ReleasesPage /> },
         { path: "/releases/:releaseSlug", element: <ReleasePage /> },
 
         { path: "/artists", element: <ArtistsPage /> },
-        { path: "/artists/:artistIdOrSlug", element: <ArtistPage /> },
+        {
+          path: "/artists/create-artist",
+          element: (
+            <RequireAuthorization>
+              <CreateArtistPage />
+            </RequireAuthorization>
+          ),
+        },
 
-        // { path: "/profile", element: <ProfilePage /> },
+        { path: "/artists/:artistIdOrSlug", element: <ArtistPage /> },
+        {
+          path: "artists/:artistIdOrSlug/create-release",
+          element: (
+            <RequireAuthorization>
+              <CreateReleasePage />
+            </RequireAuthorization>
+          ),
+        },
+        {
+          path: "/artists/:artistIdOrSlug/update-artist",
+          element: (
+            <RequireAuthorization>
+              <UpdateArtistPage />
+            </RequireAuthorization>
+          ),
+        },
       ],
     },
   ]);
 
   return (
     <>
-      <RouterProvider router={router} />
+      <Toast.Provider swipeDirection="right">
+        <RouterProvider router={router} />
+      </Toast.Provider>
     </>
   );
 };
