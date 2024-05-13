@@ -1,6 +1,20 @@
 .container {
   display: flex;
   flex-direction: column;
+
+  --alpha-dark-1: color-mix(in srgb, var(--dark), #0000 30%);
+  --alpha-dark-2: color-mix(in srgb, var(--dark), #0000 20%);
+  background-image: linear-gradient(
+      to bottom,
+      var(--alpha-dark-1) 0%,
+      var(--alpha-dark-2) 100%
+    ),
+    var(--bg-image);
+
+  background-size: cover;
+  background-position: center;
+
+  min-height: 100%;
 }
 
 .header-container {
@@ -24,49 +38,6 @@
   align-items: center;
   justify-content: center;
 }
-
-.background {
-  width: 100%;
-  height: calc(100% + var(--extra-footer-height));
-
-  content: "";
-  position: fixed;
-
-  top: 0;
-  left: 0;
-
-  z-index: -10;
-
-  overflow: hidden;
-  --alpha-dark-1: color-mix(in srgb, var(--dark), #0000 30%);
-  --alpha-dark-2: color-mix(in srgb, var(--dark), #0000 20%);
-  background-image: linear-gradient(
-      to bottom,
-      var(--alpha-dark-1) 0%,
-      var(--alpha-dark-2) 100%
-    ),
-    var(--bg-image);
-
-  background-size: cover;
-  background-position: center;
-}
-
-/* .background::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  --alpha-dark-1: color-mix(in srgb, var(--dark), #0000 30%);
-  --alpha-dark-2: color-mix(in srgb, var(--dark), #0000 20%);
-  background: linear-gradient(
-    to bottom,
-    var(--alpha-dark-1) 0%,
-    var(--alpha-dark-2) 100%
-  );
-} */
 
 .track-container {
   padding: 0 3rem;

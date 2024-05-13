@@ -4,14 +4,19 @@ import styles from "./ArtistPage.module.css";
 import { ReleaseList } from "@components/lists/release-list";
 import PageLoader from "@components/loaders/page-loader";
 import { useFetch } from "@hooks/use-fetch";
-import * as Tabs from "@radix-ui/react-tabs";
 import { getArtist, getUsedReleaseTypes } from "@services/artists";
 import { getArtistReleases } from "@services/releases";
+import { getUser } from "@services/users";
 import { isCancelledError } from "@utils/assertions";
-import { CSSProperties, useEffect, useState } from "react";
-import { TbList, TbUser, TbUsers } from "react-icons/tb";
-import { Navigate, useParams } from "react-router-dom";
 import { combineClassNames } from "@utils/style-utils";
+import { CSSProperties, useEffect, useState } from "react";
+import { TbList, TbMusicPlus, TbPencil, TbUser, TbUsers } from "react-icons/tb";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+
+import * as Avatar from "@radix-ui/react-avatar";
+import * as Tabs from "@radix-ui/react-tabs";
+import { Button } from "@components/ui/button";
+import { useAuthStore } from "@stores/auth-store";
 
 const ArtistPage = () => {
   const { data: releaseTypes, isLoading: isReleaseTypesLoading } = useFetch(
@@ -23,7 +28,13 @@ const ArtistPage = () => {
   const params = useParams<{ artistIdOrSlug: string }>();
   const artistIdOrSlug = params.artistIdOrSlug || "";
 
+  const user = useAuthStore((s) => s.user);
+
+  const navigate = useNavigate();
+
   const [releasesInfo, setReleasesInfo] = useState<Record<string, number>>();
+
+  const [isCreator, setIsCreator] = useState(false);
 
   const [type, setType] = useState({
     name: "Latest releases",
@@ -38,6 +49,13 @@ const ArtistPage = () => {
     return await getArtist(artistIdOrSlug, signal);
   });
 
+  const { data: creator } = useFetch(
+    async (signal) => {
+      return await getUser(artist?.creatorId || "", signal);
+    },
+    [artist]
+  );
+
   const {
     data: releases,
     error: releasesError,
@@ -51,6 +69,10 @@ const ArtistPage = () => {
   );
 
   useEffect(() => {
+    setIsCreator(!!user && !!artist && user.id === artist.creatorId);
+  }, [user, artist]);
+
+  useEffect(() => {
     if (!releasesInfo?.[type.slug]) {
       setReleasesInfo((prev) => {
         return {
@@ -61,6 +83,20 @@ const ArtistPage = () => {
     }
   }, [releases, type]); //eslint-disable-line
 
+  function handleCreateReleaseClick() {
+    if (!artist) {
+      return;
+    }
+    navigate(`create-release`);
+  }
+
+  function handleEditArtist() {
+    if (!artist) {
+      return;
+    }
+    navigate(`update-artist`);
+  }
+
   if (
     (!artist && isArtistLoading) ||
     (!artist && isCancelledError(artistError))
@@ -69,9 +105,11 @@ const ArtistPage = () => {
   }
 
   if (
-    (!artist && !isArtistLoading) ||
+    (!artist && isArtistLoading === false) ||
     (artistError && !isCancelledError(artistError))
   ) {
+    console.log(artist, isArtistLoading);
+
     return <Navigate to={"/not-found"} />;
   }
 
@@ -91,7 +129,6 @@ const ArtistPage = () => {
       >
         <div className={styles["info-container"]}>
           <h1 className={styles.title}>{artist.name}</h1>
-
           <div>
             {artist.type.slug === "band" ? (
               <div className={styles.info}>
@@ -107,9 +144,37 @@ const ArtistPage = () => {
               {releasesInfo?.[""]}
             </div>
           </div>
+          <div className={styles["user-wrapper"]}>
+            <span className={styles["created-by"]}>Created by: </span>
+            <div className={styles["info-wrapper"]}>
+              <Avatar.Root className={styles["avatar-root"]}>
+                <Avatar.Image
+                  className={styles["avatar-image"]}
+                  src={creator?.avatarUrl || ""}
+                />
+                <Avatar.Fallback
+                  className={styles["avatar-fallback"]}
+                  delayMs={600}
+                >
+                  {creator?.userName.charAt(0).toUpperCase()}
+                </Avatar.Fallback>
+              </Avatar.Root>
+              <div className={styles.username}>{creator?.userName}</div>
+            </div>
+          </div>
         </div>
       </div>
 
+      {isCreator && (
+        <div className={styles["creator-button-container"]}>
+          <Button onClick={handleCreateReleaseClick}>
+            <TbMusicPlus /> Create release
+          </Button>
+          <Button onClick={handleEditArtist}>
+            <TbPencil /> Edit artist
+          </Button>
+        </div>
+      )}
       <div className={styles["tabs-container"]}>
         {releases?.length === 0 ? (
           <h1 className={styles.title}>No releases yet</h1>
