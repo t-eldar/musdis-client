@@ -1,1 +1,4 @@
-export * from "./useAwait";
+import useAwait from "./useAwait";
+
+export { useAwait };
+export default useAwait;

@@ -1,11 +1,11 @@
 import { isError } from "@utils/assertions";
 import { useState, useCallback, DependencyList } from "react";
 
-export function useAwait<
+export default function useAwait<
   // eslint-disable-next-line
   TFunction extends ((...args: any[]) => Promise<any>) | (() => Promise<any>)
 >(callback: TFunction, dependencies: DependencyList = []) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>();
   const [error, setError] = useState<Error>();
 
   const promise = useCallback<

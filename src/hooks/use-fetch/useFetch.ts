@@ -8,7 +8,7 @@ export default function useFetch<
   dependencies: DependencyList = []
 ): {
   data: Awaited<ReturnType<typeof fetch>> | undefined;
-  isLoading: boolean;
+  isLoading: boolean | undefined;
   error: Error | undefined;
   refetch: () => Promise<Awaited<ReturnType<TFetch>> | undefined>;
 } {
