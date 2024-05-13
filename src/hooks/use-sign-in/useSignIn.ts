@@ -6,7 +6,7 @@ type Status = "success" | "error";
 
 export default function useSignIn(): {
   invoke: (request: SignInRequest) => Promise<Status>;
-  isLoading: boolean;
+  isLoading: boolean | undefined;
   error: Error | undefined;
 } {
   const { promise, isLoading, error } = useAwait<typeof signIn>(signIn);
@@ -20,6 +20,7 @@ export default function useSignIn(): {
 
       if (error || !response) {
         status = "error";
+        setUser(null);
       } else {
         status = "success";
 

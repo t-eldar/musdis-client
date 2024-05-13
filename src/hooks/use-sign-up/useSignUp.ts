@@ -6,7 +6,7 @@ type Status = "success" | "error";
 
 export default function useSignUp(): {
   invoke: (request: SignUpRequest) => Promise<Status>;
-  isLoading: boolean;
+  isLoading: boolean | undefined;
   error: Error | undefined;
 } {
   const { promise, isLoading, error } = useAwait<typeof signUp>(signUp);

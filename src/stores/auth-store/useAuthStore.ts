@@ -8,11 +8,11 @@ type User = {
 };
 
 type AuthStore = {
-  user: User | null;
-  setUser: (user: User | null) => void;
+  user: User | null | undefined;
+  setUser: (user: User | null | undefined) => void;
 };
 
 export const useAuthStore = create<AuthStore>((set) => ({
-  user: null,
+  user: undefined,
   setUser: (user) => set({ user }),
 }));
