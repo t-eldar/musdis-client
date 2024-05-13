@@ -10,6 +10,7 @@ import { formatBytes } from "@utils/file-utils";
 type AudioUploaderProps = {
   onSubmit: ((file: File) => void) | ((file: File) => Promise<void>);
   onFileNameChange?: (name: string) => void;
+  isLoading?: boolean;
   error?: string;
 };
 
@@ -17,10 +18,9 @@ const AudioUploader = ({
   onSubmit,
   onFileNameChange,
   error,
+  isLoading,
 }: AudioUploaderProps) => {
   const [acceptedFile, setAcceptedFile] = useState<File>();
-
-  const [loading, setLoading] = useState(false);
 
   const onDrop = useCallback((acceptedFiles: File[]): void => {
     const fileReader = new FileReader();
@@ -39,17 +39,16 @@ const AudioUploader = ({
   }
 
   async function handleSubmit() {
-    setLoading(true);
     if (acceptedFile) {
       if (onSubmit.constructor.name === "AsyncFunction") {
         await onSubmit(acceptedFile);
       } else {
         onSubmit(acceptedFile);
       }
-
-      onFileNameChange?.(acceptedFile.name);
+      if (!error) {
+        onFileNameChange?.(acceptedFile.name);
+      }
     }
-    setLoading(false);
   }
 
   return (
@@ -83,10 +82,11 @@ const AudioUploader = ({
             </Button>
           </div>
         )}
-        <Button onClick={handleSubmit} disabled={loading}>
+        <Button onClick={handleSubmit} disabled={isLoading === true}>
           Submit
         </Button>
       </div>
+      {error && <span className={styles.error}>{error}</span>}
     </div>
   );
 };

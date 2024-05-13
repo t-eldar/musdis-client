@@ -1,13 +1,14 @@
 import styles from "./ImageUploader.module.css";
 
-import { TbX } from "react-icons/tb";
-import { TbFileUpload } from "react-icons/tb";
 import { Button } from "@components/ui/button";
 import { formatBytes } from "@utils/file-utils";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { DropzoneRootProps, useDropzone } from "react-dropzone";
-import * as AspectRatio from "@radix-ui/react-aspect-ratio";
 import { IconContext } from "react-icons/lib";
+import { TbFileUpload, TbX } from "react-icons/tb";
+
+import useAlert from "@hooks/use-alert";
+import * as AspectRatio from "@radix-ui/react-aspect-ratio";
 
 type ImageUploaderProps = {
   onSubmit:
@@ -24,6 +25,10 @@ export const ImageUploader = ({
 }: ImageUploaderProps) => {
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
   const [acceptedFile, setAcceptedFile] = useState<File>();
+
+  const [submitted, setSubmitted] = useState(false);
+
+  const alert = useAlert();
 
   const onDrop = useCallback((acceptedFiles: File[]): void => {
     const fileReader = new FileReader();
@@ -42,6 +47,18 @@ export const ImageUploader = ({
     accept: { "image/*": [] },
   });
 
+  useEffect(() => {
+    if (error && submitted) {
+      console.log("error", error);
+
+      alert({
+        variant: "warning",
+        message: error,
+        title: "Upload error",
+      });
+    }
+  }, [error, submitted, alert]);
+
   function handleRemove() {
     setPreview(null);
     setAcceptedFile(undefined);
@@ -49,6 +66,7 @@ export const ImageUploader = ({
 
   async function handleSubmit() {
     if (acceptedFile && preview) {
+      setSubmitted(true);
       if (onSubmit instanceof Promise) {
         await onSubmit(acceptedFile, preview as string);
       } else {
@@ -100,12 +118,10 @@ export const ImageUploader = ({
             </Button>
           </div>
         )}
-        <Button onClick={handleSubmit} disabled={isLoading}>
+        <Button onClick={handleSubmit} disabled={isLoading === true}>
           Submit
         </Button>
       </div>
-      {/* TODO: Style error and loading state*/}
-      {error && <span>{error}</span>}
     </div>
   );
 };
