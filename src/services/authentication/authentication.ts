@@ -36,6 +36,12 @@ export async function signUp(request: SignUpRequest): Promise<User> {
   return await userSchema.parseAsync(result.data);
 }
 
+export async function signOut() {
+  const result = await apiClient.get("/sign-out");
+
+  return result.status === 200 ? "success" : "error";
+}
+
 export async function getUserInfo(abortSignal?: AbortSignal): Promise<User> {
   const result = await apiClient.get("identity-service/user", {
     signal: abortSignal,

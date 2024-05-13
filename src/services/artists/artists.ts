@@ -46,6 +46,31 @@ export async function createArtist(
   return await artistSchema.parseAsync(result.data);
 }
 
+type UpdateArtistRequest = {
+  name?: string;
+  artistTypeSlug?: string;
+  coverFile?: {
+    id: string;
+    url: string;
+  };
+  userIds?: string[];
+};
+export async function updateArtist(
+  id: string,
+  request: UpdateArtistRequest,
+  abortSignal?: AbortSignal
+) {
+  const result = await apiClient.patch(
+    `music-service/artists/${id}`,
+    { ...request, userIds: request.userIds ? request.userIds : [] },
+    {
+      signal: abortSignal,
+    }
+  );
+
+  return result.status === 204 ? "success" : "error";
+}
+
 export async function getArtist(idOrSlug: string, abortSignal?: AbortSignal) {
   const result = await apiClient.get(`music-service/artists/${idOrSlug}`, {
     signal: abortSignal,

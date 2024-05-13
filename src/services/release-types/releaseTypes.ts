@@ -16,5 +16,5 @@ export async function getReleaseTypes(
     signal: abortSignal,
   });
 
-  return await releaseTypeSchema.array().parseAsync(result.data);
+  return await releaseTypeSchema.array().parseAsync(result.data.data);
 }

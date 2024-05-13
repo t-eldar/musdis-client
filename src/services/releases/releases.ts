@@ -100,11 +100,12 @@ type CreateReleaseRequest = {
   name: string;
   releaseTypeSlug: string;
   coverFile: FileDetails;
+  artistIds: string[];
   tracks: {
     title: string;
     audioFile: FileDetails;
     tagSlugs: string[];
-  };
+  }[];
 };
 export async function createRelease(
   request: CreateReleaseRequest
@@ -114,5 +115,5 @@ export async function createRelease(
     request
   );
 
-  return await releaseSchema.parseAsync(result.data.data);
+  return await releaseSchema.parseAsync(result.data);
 }
