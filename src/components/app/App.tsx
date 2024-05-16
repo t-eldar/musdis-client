@@ -10,6 +10,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import * as Toast from "@radix-ui/react-toast";
 import { lazy } from "react";
 import useSignOut from "@hooks/use-sign-out";
+import { SandboxPage } from "@pages/sandbox";
 
 const ArtistPage = lazy(() => import("@pages/artists/artist-page"));
 const ArtistsPage = lazy(() => import("@pages/artists/artists-page"));
@@ -22,11 +23,14 @@ const CreateReleasePage = lazy(
 const ProfilePage = lazy(() => import("@pages/profile-page"));
 const ReleasePage = lazy(() => import("@pages/releases/release-page"));
 const ReleasesPage = lazy(() => import("@pages/releases/releases-page"));
-const SandboxPage = lazy(() => import("@pages/sandbox"));
+// const SandboxPage = lazy(() => import("@pages/sandbox"));
 const SignInPage = lazy(() => import("@pages/sign-in-page"));
 const SignUpPage = lazy(() => import("@pages/sign-up-page"));
 const UpdateArtistPage = lazy(
   () => import("@pages/artists/update-artist-page")
+);
+const UpdateReleasePage = lazy(
+  () => import("@pages/releases/update-release-page")
 );
 
 const App = () => {
@@ -75,6 +79,7 @@ const App = () => {
 
         { path: "/releases", element: <ReleasesPage /> },
         { path: "/releases/:releaseSlug", element: <ReleasePage /> },
+        { path: "/releases/:releaseSlug/update", element: <UpdateReleasePage /> },
 
         { path: "/artists", element: <ArtistsPage /> },
         {
