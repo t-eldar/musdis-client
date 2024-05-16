@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import type { Track } from "@services/tracks";
+import type { ReleaseTrack } from "@services/releases";
 
 type AudioStore = {
-  playlist: Track[] | null;
-  setPlaylist: (queue: Track[] | null) => void;
+  playlist: ReleaseTrack[] | null;
+  setPlaylist: (queue: ReleaseTrack[] | null) => void;
 
   currentTrackId: string | null;
   setCurrentTrackId: (id: string | null) => void;

@@ -1,7 +1,7 @@
 import styles from "./SignUpPage.module.css";
 
 import { Separator } from "@components/ui/separator";
-import { SignUpForm } from "@components/forms/sign-up-form";
+import { SignUpForm } from "@components/forms/authentication/sign-up-form";
 import { Link, useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {

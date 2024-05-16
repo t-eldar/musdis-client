@@ -57,8 +57,6 @@ export async function getLatestReleases(
   search?: string,
   abortSignal?: AbortSignal
 ): Promise<PagedDataResponse<Release>> {
-  console.log(search);
-  
   const result = await apiClient.get<PagedDataResponse<Release>>(
     "music-service/releases",
     {
