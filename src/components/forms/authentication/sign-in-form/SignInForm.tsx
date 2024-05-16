@@ -10,6 +10,7 @@ import { isAxiosError } from "axios";
 import { ComponentProps, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
+import Form from "@components/ui/form";
 
 const formSchema = z.object({
   userNameOrEmail: z.string(),
@@ -58,24 +59,13 @@ const SignInForm = ({ onSuccess, ...props }: SignInFormProps) => {
     }
   };
 
-  const checkKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-    }
-  };
-
   return (
     <div
       className={combineClassNames(styles.container, className)}
       {...unstyledProps}
     >
       <h1>Sign in</h1>
-      <form
-        className={styles.form}
-        onSubmit={handleSubmit(onSubmit)}
-        onKeyDown={(e) => checkKeyDown(e)}
-        noValidate
-      >
+      <Form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles["labeled-field"]}>
           <label htmlFor="username">
             Username <br />
@@ -107,7 +97,7 @@ const SignInForm = ({ onSuccess, ...props }: SignInFormProps) => {
             </ErrorMessage>
           )}
         </div>
-      </form>
+      </Form>
     </div>
   );
 };

@@ -12,6 +12,7 @@ import { isAxiosError } from "axios";
 import { ComponentProps } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
+import Form from "@components/ui/form";
 
 const formSchema = z
   .object({
@@ -72,12 +73,6 @@ export const SignUpForm = ({ onSuccess, ...props }: SignUpFormProps) => {
     }
   };
 
-  function checkKeyDown(e: React.KeyboardEvent) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-    }
-  }
-
   return (
     <>
       <div
@@ -85,12 +80,7 @@ export const SignUpForm = ({ onSuccess, ...props }: SignUpFormProps) => {
         {...unstyledProps}
       >
         <h1>Sign up</h1>
-        <form
-          className={styles.form}
-          onSubmit={handleSubmit(onSubmit)}
-          onKeyDown={(e) => checkKeyDown(e)}
-          noValidate
-        >
+        <Form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles["labeled-field"]}>
             <label htmlFor="username">Username</label>
             <TextField
@@ -150,7 +140,7 @@ export const SignUpForm = ({ onSuccess, ...props }: SignUpFormProps) => {
               Sign up
             </Button>
           </div>
-        </form>
+        </Form>
 
         {errors.root && errors.root.message && (
           <ErrorMessage>{errors.root.message}</ErrorMessage>
