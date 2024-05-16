@@ -1,0 +1,39 @@
+.container {
+  margin-left: 1rem;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  color: var(--accent);
+
+  background-color: var(--dark-alt);
+  border-radius: 1rem;
+  font-size: 1.4rem;
+
+  border: 1px solid transparent;
+}
+
+.focused {
+  border: 1px solid var(--accent);
+}
+
+.text-field.text-field {
+  font-size: 1.4rem;
+  border-radius: 1rem;
+
+  padding: 0 1.5rem;
+}
+
+.text-field.text-field:focus {
+  box-shadow: none;
+}
+
+.search-button {
+  color: var(--grey);
+  background-color: transparent;
+
+  padding: 0.5rem;
+}
+.search-button:hover {
+  color: var(--accent);
+}
