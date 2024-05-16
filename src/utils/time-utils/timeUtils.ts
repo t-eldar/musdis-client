@@ -29,3 +29,14 @@ export function formatSeconds(time: number) {
     return `${minutes}m`;
   }
 }
+
+export function formatDate(date: Date | string) {
+  let from: Date;
+  if (typeof date === "string") {
+    from = new Date(date);
+  } else {
+    from = date;
+  }
+
+  return from.toLocaleDateString();
+}
