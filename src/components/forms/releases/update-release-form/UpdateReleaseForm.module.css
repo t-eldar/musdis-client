@@ -1,0 +1,119 @@
+.form {
+  display: flex;
+  gap: 1rem;
+
+  width: 100%;
+}
+
+.right-section {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+
+  justify-content: space-between;
+}
+
+.fields-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.title {
+  color: var(--light);
+  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.name-field.name-field {
+  width: 50%;
+  font-size: 1rem;
+}
+
+.labeled-field {
+  color: var(--light);
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.labeled-field h1 {
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+.field {
+  width: 50%;
+}
+
+.field-error-tip {
+  right: 1rem;
+}
+
+.field-error-tip.field-error-tip,
+.cover-error-tip.cover-error-tip {
+  border-radius: 1rem;
+}
+
+.cover-error-tip {
+  bottom: 1rem;
+  left: 1rem;
+}
+
+.cover-container {
+  border-radius: 2rem;
+  border: 1px dashed var(--light);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--accent);
+
+  cursor: pointer;
+
+  width: 20rem;
+  aspect-ratio: 1;
+}
+
+.left-section {
+  width: 50%;
+  position: relative;
+}
+
+.cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.submit-button {
+  display: flex;
+  align-items: center;
+
+  align-self: flex-end;
+  gap: 0.5rem;
+}
+
+.button-container {
+  display: flex;
+  justify-content: end;
+  gap: 1rem;
+}
+
+.delete-button {
+  color: var(--warning);
+  background-color: var(--dark-alt);
+}
+
+.ensure-delete-container {
+  color: var(--light);
+}
