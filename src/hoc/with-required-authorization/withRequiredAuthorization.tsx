@@ -1,16 +1,17 @@
 import { useAuthStore } from "@stores/auth-store";
 import { ComponentType, FC } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 const withRequiredAuthorization = <TProps extends object>(
   WrappedComponent: ComponentType<TProps>
 ): FC<TProps> => {
   const WithUser = (props: TProps) => {
     const user = useAuthStore((state) => state.user);
-    console.log(user);
-    
+
+    const location = useLocation();
+
     if (user === null) {
-      return <Navigate to="/sign-in" />;
+      return <Navigate to="/sign-in" replace state={{ from: location }} />;
     }
 
     return <WrappedComponent {...props} />;
