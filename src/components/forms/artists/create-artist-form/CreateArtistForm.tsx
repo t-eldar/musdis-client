@@ -1,13 +1,13 @@
 import styles from "./CreateArtistForm.module.css";
 
 import { ImageUploader } from "@components/file-uploaders/image-uploader";
-import ErrorTip from "@components/forms/shared/error-tip";
+import { ErrorTip } from "@components/forms/shared/error-tip";
 import { Button } from "@components/ui/button";
+import { Form } from "@components/ui/form";
 import { Modal } from "@components/ui/modal";
-import Select from "@components/ui/select";
 import { TextField } from "@components/ui/text-field";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useAlert from "@hooks/use-alert";
+import { useAlert } from "@hooks/use-alert";
 import { useAwait } from "@hooks/use-await";
 import { useFetch } from "@hooks/use-fetch";
 import { getArtistTypes } from "@services/artist-types";
@@ -18,6 +18,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TbFileUpload, TbUsers } from "react-icons/tb";
 import { z } from "zod";
+
+import Select from "@components/ui/select";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -108,12 +110,6 @@ const CreateArtistForm = ({ onCreated }: CreateArtistFormProps) => {
     }
   }
 
-  function checkKeyDown(e: React.KeyboardEvent) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-    }
-  }
-
   return (
     <>
       <Modal open={isFileUploaderOpen} onOpenChange={setIsFileUploaderOpen}>
@@ -123,12 +119,7 @@ const CreateArtistForm = ({ onCreated }: CreateArtistFormProps) => {
           error={uploadError?.message}
         />
       </Modal>
-      <form
-        className={styles.form}
-        onSubmit={handleSubmit(onSubmit)}
-        onKeyDown={(e) => checkKeyDown(e)}
-        noValidate
-      >
+      <Form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles["cover-container-wrapper"]}>
           <div
             className={styles["cover-container"]}
@@ -199,7 +190,7 @@ const CreateArtistForm = ({ onCreated }: CreateArtistFormProps) => {
         <div className={styles["submit-container"]}>
           <Button disabled={isSubmitting}>Create</Button>
         </div>
-      </form>
+      </Form>
     </>
   );
 };
