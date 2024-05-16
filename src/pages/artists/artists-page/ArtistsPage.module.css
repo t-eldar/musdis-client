@@ -10,4 +10,22 @@
 
 .container {
   padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.search {
+  width: 100%;
+  height: fit-content;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  width: 50%;
+
+  color: var(--accent);
 }

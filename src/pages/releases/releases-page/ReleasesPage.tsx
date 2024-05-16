@@ -1,30 +1,46 @@
+import ReleaseList from "@components/lists/release-list";
 import styles from "./ReleasesPage.module.css";
 
-import { MosaicReleaseList } from "@components/lists/mosaic-release-list";
 import { PageLoader } from "@components/loaders/page-loader";
-import { Button } from "@components/ui/button";
+import { Pagination } from "@components/pagination";
+import SearchBar from "@components/search-bar";
 import Separator from "@components/ui/separator";
 import { usePagedFetch } from "@hooks/use-paged-fetch";
 import { getLatestReleases } from "@services/releases";
 import { isCancelledError } from "@utils/assertions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const LIMIT = 20;
 const ReleasesPage = () => {
+  const [params, setParams] = useSearchParams();
+
+  const [searchValue, setSearchValue] = useState(params.get("search") || "");
+
+  useEffect(() => {
+    setSearchValue(params.get("search") || "");
+  }, [params]);
+
   const [page, setPage] = useState(1);
   const {
     data: releases,
     hasMore,
     isLoading,
     error,
+    totalCount,
   } = usePagedFetch(
     async (page, pageSize, signal) => {
-      return await getLatestReleases(page, pageSize, signal);
+      return await getLatestReleases(page, pageSize, searchValue, signal);
     },
     page,
     LIMIT,
-    true
+    false,
+    [params]
   );
+
+  useEffect(() => {
+    setPage(1);
+  }, [params]);
 
   if ((isCancelledError(error) && !releases) || (!releases && isLoading)) {
     return <PageLoader />;
@@ -36,24 +52,28 @@ const ReleasesPage = () => {
 
   return (
     <>
-      <div>
-        <div className={styles["title-container"]}>
-          <h1 className={styles.title}>New releases</h1>
+      <div className={styles.container}>
+        <div className={styles["search-container"]}>
+          <h1>Releases</h1>
+          <SearchBar
+            className={styles.search}
+            value={searchValue}
+            setValue={setSearchValue}
+            onSearch={(q) => setParams({ search: q })}
+          />
         </div>
         <div>
-          <MosaicReleaseList releases={releases} />
+          <ReleaseList releases={releases} />
         </div>
         <Separator />
         <div className={styles.footer}>
-          {hasMore && (
-            <Button
-              className={styles["load-button"]}
-              disabled={isLoading}
-              onClick={() => setPage((prev) => prev + 1)}
-            >
-              {isLoading ? "Loading..." : "Load more"}
-            </Button>
-          )}
+          <Pagination
+            onPageChange={setPage}
+            pageSize={LIMIT}
+            totalCount={totalCount}
+            currentPage={page}
+            siblingCount={1}
+          />
         </div>
       </div>
     </>

@@ -1,5 +1,12 @@
-.loader {
-  height: 100vh;
+.container {
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 2rem;
 }
 
 .title-container {
@@ -34,4 +41,17 @@
 .load-button:disabled {
   cursor: not-allowed;
   background-color: var(--accent);
+}
+
+.search {
+  width: 100%;
+  height: fit-content;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  width: 50%;
+
+  color: var(--accent);
 }

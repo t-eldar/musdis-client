@@ -2,56 +2,74 @@ import styles from "./ArtistsPage.module.css";
 
 import { ArtistList } from "@components/lists/artist-list";
 import { PageLoader } from "@components/loaders/page-loader";
-import { usePagedFetch } from "@hooks/use-paged-fetch";
+import Pagination from "@components/pagination";
+import { SearchBar } from "@components/search-bar";
 import { Separator } from "@components/ui/separator";
+import { usePagedFetch } from "@hooks/use-paged-fetch";
 import { getArtists } from "@services/artists";
 import { isCancelledError } from "@utils/assertions";
-import { useState } from "react";
-import { Button } from "@components/ui/button";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const LIMIT = 20;
 const ArtistsPage = () => {
-  const [page, setPage] = useState(1);
+  const [params, setParams] = useSearchParams();
 
+  const [searchValue, setSearchValue] = useState(params.get("search") || "");
+
+  useEffect(() => {
+    setSearchValue(params.get("search") || "");
+  }, [params]);
+
+  const [page, setPage] = useState(1);
   const {
     data: artists,
-    isLoading: isArtistsLoading,
-    error: artistsError,
-    hasMore,
+    isLoading,
+    error,
+    totalCount,
   } = usePagedFetch(
-    async (page, limit, signal) => {
-      return await getArtists(page, limit, signal);
+    async (page, pageSize, signal) => {
+      return await getArtists(page, pageSize, searchValue, signal);
     },
     page,
     LIMIT,
-    true
+    false,
+    [params]
   );
 
-  if (
-    (!artists && isArtistsLoading) ||
-    (!artists && isCancelledError(artistsError))
-  ) {
+  useEffect(() => {
+    setPage(1);
+  }, [params]);
+
+  if ((isCancelledError(error) && !artists) || (!artists && isLoading)) {
     return <PageLoader />;
   }
 
   if (!artists) {
-    return;
+    return <></>;
   }
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Artists</h1>
+      <div className={styles["search-container"]}>
+        <h1>Artists</h1>
+        <SearchBar
+          className={styles.search}
+          value={searchValue}
+          setValue={setSearchValue}
+          onSearch={(q) => setParams({ search: q })}
+        />
+      </div>
       <ArtistList artists={artists} />
       <Separator />
       <div className={styles.footer}>
-        {hasMore && (
-          <Button
-            onClick={() => setPage((prev) => prev + 1)}
-            disabled={!hasMore}
-          >
-            Load more
-          </Button>
-        )}
+        <Pagination
+          onPageChange={setPage}
+          pageSize={LIMIT}
+          totalCount={totalCount}
+          currentPage={page}
+          siblingCount={1}
+        />
       </div>
     </div>
   );
