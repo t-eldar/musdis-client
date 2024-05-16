@@ -17,6 +17,7 @@ export default function usePagedFetch<
 ) {
   const [data, setData] = useState<Awaited<ReturnType<TFetch>>["data"]>();
   const [hasMore, setHasMore] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
   const [isCleaned, setIsCleaned] = useState(false);
 
   const fetcher = useCallback(
@@ -33,6 +34,8 @@ export default function usePagedFetch<
             ReturnType<TFetch>
           >["data"];
         }
+
+        setTotalCount(result.paginationInfo.totalCount);
         return [...result.data] as Awaited<ReturnType<TFetch>>["data"];
       });
 
@@ -61,6 +64,7 @@ export default function usePagedFetch<
     error,
     data,
     hasMore,
+    totalCount,
     refresh: () => {
       setData([] as Awaited<ReturnType<TFetch>>["data"]);
     },
