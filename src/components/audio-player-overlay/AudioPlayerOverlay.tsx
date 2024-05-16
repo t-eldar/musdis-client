@@ -1,9 +1,11 @@
 import styles from "./AudioPlayerOverlay.module.css";
+
 import AudioPlayer from "@components/audio-player";
-import { useEffect, useState } from "react";
+
+import { ArtistsLinks } from "@components/artists-links";
 import { useAudioStore } from "@stores/audio-store";
 import { combineClassNames } from "@utils/style-utils";
-import ArtistsLinks from "@components/artists-links";
+import { useEffect, useState } from "react";
 
 type AudioPlayerOverlayProps = {
   onActiveChange?: (isActive: boolean) => void;

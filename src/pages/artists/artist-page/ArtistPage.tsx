@@ -37,7 +37,7 @@ const ArtistPage = () => {
   const [isCreator, setIsCreator] = useState(false);
 
   const [type, setType] = useState({
-    name: "Latest releases",
+    name: "Latest release",
     slug: "",
   });
 

@@ -60,13 +60,14 @@
 }
 
 .info-container {
+  color: var(--light);
   display: flex;
   flex-direction: column;
   justify-items: center;
   align-items: start;
   gap: 1rem;
-
-  max-width: 50%;
+  
+  min-width: 50%;
 }
 
 .info-container h1 {
@@ -83,7 +84,6 @@
 
 .info {
   text-align: right;
-  color: var(--light);
 
   display: flex;
   align-items: center;
@@ -94,6 +94,8 @@
 .header-bottom {
   display: flex;
   justify-content: space-between;
+
+  gap: 1rem;
 
   width: 100%;
 }
@@ -117,4 +119,13 @@
 
 .play-button:hover {
   background-color: rgba(0, 0, 0, 0.2);
+}
+
+.edit-button {
+  gap: 0.5rem;
+}
+
+.release-date {
+  font-weight: 200;
+  font-size: 0.9rem;
 }

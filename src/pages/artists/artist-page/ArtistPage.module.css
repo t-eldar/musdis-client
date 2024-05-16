@@ -99,8 +99,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  max-width: 5rem;
 }
 .user-wrapper {
   display: flex;

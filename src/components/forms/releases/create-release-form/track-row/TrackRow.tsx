@@ -21,7 +21,6 @@ type TrackRowProps = {
     title?: { message?: string };
     audioFile?: { message?: string };
   };
-
   onSelectedTagsChange: (tags: { name: string; slug: string }[]) => void;
   registerTitle: () => UseFormRegisterReturn<`tracks.${number}.title`>;
   className?: string;

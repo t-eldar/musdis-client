@@ -4,6 +4,7 @@ import { ImageUploader } from "@components/file-uploaders/image-uploader";
 import { TrackRow } from "@components/forms/releases/create-release-form/track-row";
 import { ErrorTip } from "@components/forms/shared/error-tip";
 import { Button } from "@components/ui/button";
+import Form from "@components/ui/form";
 import { Modal } from "@components/ui/modal";
 import Select from "@components/ui/select";
 import { TextField } from "@components/ui/text-field";
@@ -112,11 +113,7 @@ const CreateReleaseForm = ({ artist, onCreated }: CreateReleaseFormProps) => {
       onCreated?.();
     }
   }
-  function checkKeyDown(e: React.KeyboardEvent) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-    }
-  }
+
   async function handleImageSubmit(file: File) {
     const result = await uploadImage(file);
     if (result) {
@@ -161,12 +158,7 @@ const CreateReleaseForm = ({ artist, onCreated }: CreateReleaseFormProps) => {
         <h1 className={styles.title}>
           <TbDeviceAudioTape /> Create release for {artist?.name}
         </h1>
-        <form
-          className={styles.form}
-          onSubmit={handleSubmit(onSubmit)}
-          onKeyDown={(e) => checkKeyDown(e)}
-          noValidate
-        >
+        <Form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles["labeled-field"]}>
             <label>
               <h3>Cover</h3>
@@ -274,7 +266,7 @@ const CreateReleaseForm = ({ artist, onCreated }: CreateReleaseFormProps) => {
               Create
             </Button>
           </div>
-        </form>
+        </Form>
       </div>
     </>
   );
