@@ -60,13 +60,9 @@ export async function updateArtist(
   request: UpdateArtistRequest,
   abortSignal?: AbortSignal
 ) {
-  const result = await apiClient.patch(
-    `music-service/artists/${id}`,
-    { ...request, userIds: request.userIds ? request.userIds : [] },
-    {
-      signal: abortSignal,
-    }
-  );
+  const result = await apiClient.patch(`music-service/artists/${id}`, request, {
+    signal: abortSignal,
+  });
 
   return result.status === 204 ? "success" : "error";
 }
@@ -105,6 +101,7 @@ const pagedDataResponseSchema = z.object({
 export async function getArtists(
   page: number,
   pageSize: number,
+  search: string,
   abortSignal?: AbortSignal
 ): Promise<PagedDataResponse<Artist>> {
   const result = await apiClient.get<PagedDataResponse<Artist>>(
@@ -116,6 +113,7 @@ export async function getArtists(
         pageSize,
         sort: "name",
         sortOrder: "asc",
+        search: search ? search : undefined,
       },
     }
   );
