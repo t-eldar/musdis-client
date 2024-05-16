@@ -7,10 +7,10 @@ import { Button } from "@components/ui/button";
 import { useFetch } from "@hooks/use-fetch";
 import { getRelease } from "@services/releases";
 import { useAudioStore } from "@stores/audio-store";
-import { formatSeconds } from "@utils/time-utils";
+import { formatDate, formatSeconds } from "@utils/time-utils";
 import { CSSProperties, useState } from "react";
-import { TbClock, TbList, TbPlayerPlayFilled } from "react-icons/tb";
-import { useParams } from "react-router-dom";
+import { TbClock, TbList, TbPencil, TbPlayerPlayFilled } from "react-icons/tb";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ReleasePage = () => {
   const params = useParams<{ releaseSlug: string }>();
@@ -21,6 +21,8 @@ const ReleasePage = () => {
   const setCurrentTrackId = useAudioStore((state) => state.setCurrentTrackId);
 
   const [totalDuration, setTotalDuration] = useState(0);
+
+  const navigate = useNavigate();
 
   const {
     data: release,
@@ -47,6 +49,10 @@ const ReleasePage = () => {
     }
   }
 
+  function handleEditRelease() {
+    navigate(`update`);
+  }
+
   return (
     <div
       className={styles.container}
@@ -58,13 +64,26 @@ const ReleasePage = () => {
         </div>
 
         <div className={styles["info-container"]}>
-          <h1 className={styles.title}>{release?.name}</h1>
-          <ArtistsLinks artists={release?.artists} className={styles.artists} />
-
+          <div>
+            <h1 className={styles.title}>{release?.name}</h1>
+            <ArtistsLinks
+              artists={release?.artists}
+              className={styles.artists}
+            />
+            <span className={styles["release-date"]}>
+              {formatDate(release.releaseDate)}
+            </span>
+          </div>
           <div className={styles["header-bottom"]}>
             <Button className={styles["play-button"]} onClick={handlePlay}>
               <TbPlayerPlayFilled style={{ marginRight: "0.5rem" }} />
               Play all
+            </Button>
+            <Button
+              className={styles["edit-button"]}
+              onClick={handleEditRelease}
+            >
+              <TbPencil /> Edit
             </Button>
             <div className={styles["tracks-info"]}>
               <div className={styles["info"]}>
