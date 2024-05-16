@@ -138,16 +138,20 @@
   gap: 0.5rem;
 }
 
-.create-artist-button {
+.create-artist-button-big {
+  font-size: 2rem;
+}
+
+.create-artist-button,
+.create-artist-button-big {
   border: 1px solid transparent;
   background-color: var(--dark-alt);
   color: var(--accent);
   gap: 0.5rem;
-
-  font-size: 2rem;
 }
 
-.create-artist-button:hover {
+.create-artist-button:hover,
+.create-artist-button-big:hover {
   border: 1px solid var(--accent);
   background-color: var(--dark-alt);
   color: var(--accent);

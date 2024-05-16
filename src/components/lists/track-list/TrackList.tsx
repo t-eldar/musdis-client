@@ -2,7 +2,7 @@ import ArtistsLinks from "@components/artists-links";
 import styles from "./TrackList.module.css";
 
 import { Button } from "@components/ui/button";
-import { Track } from "@services/tracks";
+import { ReleaseTrack } from "@services/tracks";
 import { useAudioStore } from "@stores/audio-store";
 import { combineClassNames } from "@utils/style-utils";
 import { formatDuration } from "@utils/time-utils";
@@ -10,7 +10,7 @@ import { ComponentProps, useEffect, useState } from "react";
 import { TbPlayerPauseFilled, TbPlayerPlayFilled } from "react-icons/tb";
 
 type TrackListProps = ComponentProps<"ul"> & {
-  tracks: Track[];
+  tracks: ReleaseTrack[];
   onTotalDurationChange?: (totalDuration: number) => void;
 };
 
@@ -59,7 +59,7 @@ const TrackList = ({
     fetchDurations();
   }, [tracks, onTotalDurationChange]);
 
-  function handleClickPlay(track: Track) {
+  function handleClickPlay(track: ReleaseTrack) {
     if (state.playlist && state.currentTrackId === track.id) {
       if (state.isPlaying) {
         state.audioElement?.pause();

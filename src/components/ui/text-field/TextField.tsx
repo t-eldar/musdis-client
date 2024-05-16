@@ -5,7 +5,7 @@ import { ComponentProps, forwardRef } from "react";
 
 /** Text field props. */
 export type TextFieldProps = Omit<ComponentProps<"input">, "type"> & {
-  type: "text" | "password" | "email" | "number" | "tel" | "url";
+  type?: "text" | "password" | "email" | "number" | "tel" | "url";
 };
 
 /** Text field ref. */

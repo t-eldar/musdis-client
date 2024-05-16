@@ -48,9 +48,6 @@ const MosaicReleaseList = ({ releases, ...rest }: MosaicReleaseListProps) => {
           style={{ "--bg-image": `url(${release.coverUrl})` } as CSSProperties}
           onClick={() => navigate(`/releases/${release.slug}`)}
         >
-          {/* <div className={styles["cover-container"]}>
-            <img className={styles.cover} src={release.coverUrl} />
-          </div> */}
           <div className={styles["info-container"]}>
             <span className={styles["release-link"]}>{release.name}</span>
             <div className={styles["artists-container"]}>

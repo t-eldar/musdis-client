@@ -125,7 +125,7 @@ const ProfilePage = () => {
             ) : artists && artists.length === 0 ? (
               <div className={styles["no-artists-container"]}>
                 <Button
-                  className={styles["create-artist-button"]}
+                  className={styles["create-artist-button-big"]}
                   onClick={handleCreateArtistClick}
                 >
                   <FaGuitar />
