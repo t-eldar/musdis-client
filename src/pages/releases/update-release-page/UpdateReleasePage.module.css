@@ -1,0 +1,47 @@
+.container {
+  padding: 1rem;
+}
+
+.tabs-list {
+  display: flex;
+}
+
+.tabs-trigger {
+  color: var(--accent);
+  background-color: var(--dark-alt);
+
+  padding: 0.5rem 0.5rem;
+
+  display: flex;
+  flex: 1 1 0px;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+.tabs-trigger:first-child {
+  border-top-left-radius: 1rem;
+}
+.tabs-trigger:last-child {
+  border-top-right-radius: 1rem;
+}
+.tabs-trigger:hover {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.tabs-trigger:focus {
+  position: relative;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.form-container {
+  background-color: var(--dark);
+  padding: 1rem;
+  border-bottom-right-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+}
+
+.tracks-list {
+  all: unset;
+}
+
+
