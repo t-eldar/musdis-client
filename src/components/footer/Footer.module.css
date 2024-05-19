@@ -1,0 +1,44 @@
+.container {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--light);
+
+  margin-bottom: 1rem;
+}
+
+.content-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+
+  padding: 2rem;
+  padding-bottom: 0;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  text-wrap: pretty;
+}
+
+.content h3 {
+  color: var(--accent);
+}
+
+.accent {
+  color: var(--accent);
+  font-size: 1.3rem;
+}
+
+.link {
+  all: unset;
+  cursor: pointer;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
