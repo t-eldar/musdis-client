@@ -3,7 +3,13 @@
 }
 
 .extra-footer {
-  height: var(--extra-footer-height);
+  height: calc(var(--extra-footer-height) + 1rem);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .container {
@@ -13,13 +19,20 @@
   background-color: var(--dark);
 }
 
-.navbar {
+.navbar-container {
   height: 100vh;
+
+  display: grid;
+  grid-template-rows: 1fr 10fr;
+}
+
+.navbar {
   padding: 0 1rem;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 2rem;
 }
 
 .content {
