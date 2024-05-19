@@ -165,3 +165,11 @@ export async function deleteRelease(id: string, abortSignal?: AbortSignal) {
 
   return result.status === 204 || result.status === 200 ? "success" : "error";
 }
+
+export async function getRandomRelease(abortSignal?: AbortSignal) {
+  const result = await apiClient.get("/music-service/releases/random", {
+    signal: abortSignal,
+  });
+  
+  return await releaseSchema.parseAsync(result.data.data);
+}

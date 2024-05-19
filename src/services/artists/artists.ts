@@ -139,3 +139,11 @@ export async function getUserArtists(
 
   return await artistSchema.array().parseAsync(result.data.data);
 }
+
+export async function deleteArtist(id: string, abortSignal?: AbortSignal) {
+  const result = await apiClient.delete(`music-service/artists/${id}`, {
+    signal: abortSignal,
+  });
+
+  return result.status === 204 || result.status === 200 ? "success" : "error";
+}
