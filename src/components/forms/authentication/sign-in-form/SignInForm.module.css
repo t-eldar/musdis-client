@@ -1,8 +1,6 @@
 .container {
-  display: flex;
+  display: grid;
   flex-direction: column;
-
-  content: center;
 
   padding: 2rem;
   border-radius: 1rem;
@@ -15,23 +13,14 @@
 }
 
 .form {
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-template-rows: 1fr 1fr 1fr;
   gap: 1rem;
-}
 
-.labeled-field {
-  display: flex;
   align-items: center;
-  gap: 1rem;
-}
-
-.labeled-field > label {
-  width: 15%;
-  text-align: end;
-
-  overflow: scroll;
-  scrollbar-width: none;
+  justify-items: end;
 }
 
 .field-container {
@@ -45,7 +34,10 @@
 }
 
 .submit-container {
+  grid-row: 3;
+  grid-column: 2;
   display: flex;
   justify-content: space-between;
 
+  gap: 2rem;
 }

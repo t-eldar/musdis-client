@@ -25,26 +25,15 @@ type MosaicReleaseListProps = ComponentProps<"ul"> & {
 const MosaicReleaseList = ({ releases, ...rest }: MosaicReleaseListProps) => {
   const navigate = useNavigate();
 
-  function getCardClassName(index: number) {
-    let className = "";
-    if (index % 5 === 0) {
-      className = styles["card-doubled"];
-    } else {
-      className = styles["card"];
-    }
-
-    return combineClassNames(className, styles.card);
-  }
-
   return (
     <ul
       className={combineClassNames(styles["grid-container"], rest.className)}
       {...rest}
     >
-      {releases.map((release, index) => (
+      {releases.map((release) => (
         <li
           key={release.id}
-          className={getCardClassName(index)}
+          className={styles.card}
           style={{ "--bg-image": `url(${release.coverUrl})` } as CSSProperties}
           onClick={() => navigate(`/releases/${release.slug}`)}
         >

@@ -3,11 +3,12 @@ import styles from "./ReleaseList.module.css";
 
 import { ArtistsLinks } from "@components/artists-links";
 import { combineClassNames } from "@utils/style-utils";
-import { ComponentProps } from "react";
+import { CSSProperties, ComponentProps } from "react";
 import { TbList } from "react-icons/tb";
 
 type ReleaseListProps = ComponentProps<"ul"> & {
   releases: {
+    id: string;
     slug: string;
     name: string;
     coverUrl: string;
@@ -25,16 +26,17 @@ const ReleaseList = ({ releases, ...rest }: ReleaseListProps) => {
   const navigate = useNavigate();
 
   return (
-    <ul className={combineClassNames(styles.list, rest.className)} {...rest}>
+    <ul
+      className={combineClassNames(styles["grid-container"], rest.className)}
+      {...rest}
+    >
       {releases.map((release) => (
         <li
-          key={release.slug}
-          className={styles.item}
+          key={release.id}
+          className={styles.card}
+          style={{ "--bg-image": `url(${release.coverUrl})` } as CSSProperties}
           onClick={() => navigate(`/releases/${release.slug}`)}
         >
-          <div className={styles["cover-container"]}>
-            <img className={styles.cover} src={release.coverUrl} />
-          </div>
           <div className={styles["info-container"]}>
             <span className={styles["release-link"]}>{release.name}</span>
             <div className={styles["artists-container"]}>

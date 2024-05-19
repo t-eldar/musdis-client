@@ -2,7 +2,7 @@ import ArtistsLinks from "@components/artists-links";
 import styles from "./TrackList.module.css";
 
 import { Button } from "@components/ui/button";
-import { ReleaseTrack } from "@services/tracks";
+import { ReleaseTrack } from "@services/releases";
 import { useAudioStore } from "@stores/audio-store";
 import { combineClassNames } from "@utils/style-utils";
 import { formatDuration } from "@utils/time-utils";
@@ -19,6 +19,8 @@ const TrackList = ({
   onTotalDurationChange,
   ...rest
 }: TrackListProps) => {
+  const { className, ...props } = rest;
+
   const [trackDurations, setTrackDurations] = useState<string[]>(
     tracks.map(() => "--:--")
   );
@@ -75,27 +77,38 @@ const TrackList = ({
       state.setPlaylist(tracks);
       state.setCurrentTrackId(track.id);
     }
-    console.log(state.audioElement);
-    
+
     state.audioElement?.play();
   }
 
   return (
-    <ul className={combineClassNames(styles.list, rest.className)} {...rest}>
+    <ul className={combineClassNames(styles.list, className)} {...props}>
       {tracks.map((track, index) => (
         <li key={track.slug} className={styles.item}>
-          <Button
-            className={styles["play-button"]}
-            onClick={() => handleClickPlay(track)}
-          >
-            {track.id === state.currentTrackId && state.isPlaying ? (
-              <TbPlayerPauseFilled />
-            ) : (
-              <TbPlayerPlayFilled />
-            )}
-          </Button>
-          <span className={styles.title}>{track.title}</span>
-          <ArtistsLinks artists={track.artists} />
+          <div className={styles.flex}>
+            <span className={styles.number}>{index + 1}</span>
+            <Button
+              className={styles["play-button"]}
+              onClick={() => handleClickPlay(track)}
+            >
+              {track.id === state.currentTrackId && state.isPlaying ? (
+                <TbPlayerPauseFilled />
+              ) : (
+                <TbPlayerPlayFilled />
+              )}
+            </Button>
+            <div className={styles.info}>
+              <h3 className={styles.title}>{track.title}</h3>
+              <ArtistsLinks artists={track.artists} />
+            </div>
+          </div>
+          <div className={styles["tag-container"]}>
+            {track.tags.map((tag) => (
+              <div key={tag.slug} className={styles.tag}>
+                {tag.name}
+              </div>
+            ))}
+          </div>
           <span className={styles.duration}>{trackDurations[index]}</span>
         </li>
       ))}

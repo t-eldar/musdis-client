@@ -5,30 +5,38 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorMessage from "@components/forms/shared/error-message";
 import ErrorTip from "@components/forms/shared/error-tip";
 import { Button } from "@components/ui/button";
+import Form from "@components/ui/form";
 import { TextField } from "@components/ui/text-field";
 import { useSignUp } from "@hooks/use-sign-up";
 import { combineClassNames } from "@utils/style-utils";
 import { isAxiosError } from "axios";
 import { ComponentProps } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Form from "@components/ui/form";
+import { containsLowercase, containsUppercase } from "@utils/validation-utils";
 
 const formSchema = z
   .object({
-    userName: z.string(),
+    userName: z.string().min(3).max(12),
     email: z.string().email(),
-    password: z.string(),
+    password: z.string().min(6),
     confirmPassword: z.string(),
   })
-  .superRefine(({ confirmPassword, password }, ctx) => {
-    if (confirmPassword !== password) {
-      ctx.addIssue({
-        path: ["confirmPassword"],
-        code: z.ZodIssueCode.custom,
-        message: "The passwords did not match",
-      });
-    }
+  .refine(({ userName }) => !userName.includes(" "), {
+    message: "Username cannot contain spaces",
+    path: ["userName"],
+  })
+  .refine(({ password }) => containsUppercase(password), {
+    message: "Password must contain at least one uppercase character",
+    path: ["password"],
+  })
+  .refine(({ password }) => containsLowercase(password), {
+    message: "Password must contain at least one lowercase character",
+    path: ["password"],
+  })
+  .refine(({ confirmPassword, password }) => confirmPassword === password, {
+    path: ["confirmPassword"],
+    message: "The passwords did not match",
   });
 
 type FormFields = z.infer<typeof formSchema>;
@@ -51,14 +59,12 @@ export const SignUpForm = ({ onSuccess, ...props }: SignUpFormProps) => {
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    console.log(errors);
-
+  async function onSubmit(data: FormFields) {
     const result = await invokeSignUp(data);
     if (result === "error") {
       if (isAxiosError(signUpError) && signUpError.response?.status === 409) {
         setError("userName", {
-          message: "This username is already taken",
+          message: "Username or email is already taken",
         });
 
         return;
@@ -71,7 +77,7 @@ export const SignUpForm = ({ onSuccess, ...props }: SignUpFormProps) => {
     } else {
       onSuccess?.();
     }
-  };
+  }
 
   return (
     <>
@@ -79,7 +85,6 @@ export const SignUpForm = ({ onSuccess, ...props }: SignUpFormProps) => {
         className={combineClassNames(styles.container, className)}
         {...unstyledProps}
       >
-        <h1>Sign up</h1>
         <Form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles["labeled-field"]}>
             <label htmlFor="username">Username</label>
@@ -119,9 +124,16 @@ export const SignUpForm = ({ onSuccess, ...props }: SignUpFormProps) => {
               placeholder="Enter your password."
               {...register("password")}
             />
+            <ErrorTip
+              open={!!errors.password}
+              className={styles["error-tip-field"]}
+            >
+              {errors.password?.message}
+            </ErrorTip>
           </div>
+
           <div className={styles["labeled-field"]}>
-            <label htmlFor="confirmPassword">Confirm your password</label>
+            <label htmlFor="confirmPassword">Confirm password</label>
             <TextField
               id="confirmPassword"
               type="password"

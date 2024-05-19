@@ -30,7 +30,7 @@ const ArtistList = ({ artists }: ArtistListProps) => {
             } as CSSProperties
           }
           onClick={() => {
-            navigate(`/artists/${artist.slug}`);
+            navigate(`/musicians/${artist.slug}`);
           }}
         >
           <div className={styles.info}>

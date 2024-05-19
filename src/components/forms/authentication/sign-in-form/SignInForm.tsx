@@ -64,38 +64,32 @@ const SignInForm = ({ onSuccess, ...props }: SignInFormProps) => {
       className={combineClassNames(styles.container, className)}
       {...unstyledProps}
     >
-      <h1>Sign in</h1>
       <Form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles["labeled-field"]}>
-          <label htmlFor="username">
-            Username <br />
-            or email
-          </label>
-          <TextField
-            id="username"
-            type="text"
-            placeholder="Enter your username or email."
-            {...register("userNameOrEmail")}
-          />
-        </div>
-        <div className={styles["labeled-field"]}>
-          <label htmlFor="password">Password</label>
-          <TextField
-            id="password"
-            type="password"
-            placeholder="Enter your password."
-            {...register("password")}
-          />
-        </div>
+        <label htmlFor="username">Username or email</label>
+        <TextField
+          id="username"
+          type="text"
+          placeholder="Enter your username or email."
+          {...register("userNameOrEmail")}
+        />
+
+        <label htmlFor="password">Password</label>
+        <TextField
+          id="password"
+          type="password"
+          placeholder="Enter your password."
+          {...register("password")}
+        />
+
         <div className={styles["submit-container"]}>
-          <Button type="submit" disabled={isSubmitting}>
-            Sign in
-          </Button>
           {errors.root && (
             <ErrorMessage>
               {errors.root.message || "Something went wrong"}
             </ErrorMessage>
           )}
+          <Button type="submit" disabled={isSubmitting}>
+            Sign in
+          </Button>
         </div>
       </Form>
     </div>

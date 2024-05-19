@@ -66,7 +66,9 @@
   display: flex;
   width: 100%;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
+
+  gap: 1rem;
 }
 
 .title {
@@ -82,4 +84,18 @@
 
 .field {
   font-size: 1rem;
+}
+
+.delete-button {
+  border: 1px solid var(--warning);
+
+  background-color: var(--dark);
+  color: var(--warning);
+}
+
+.ensure-delete-container {
+  display: flex;
+  flex-direction: column;
+
+  color: var(--light);
 }

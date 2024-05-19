@@ -1,6 +1,6 @@
 .input {
   box-sizing: border-box;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 0.6rem;
   background-color: var(--dark-alt);
   color: var(--light);
@@ -10,12 +10,14 @@
   line-height: 1;
   height: fit-content;
 
+  font-family: inherit;
+
   width: 100%;
 }
 
 .input:focus {
   outline: none;
-  box-shadow: 0 0 0 1px var(--accent);
+  border: 1px solid var(--accent);
 }
 
 .input::-webkit-outer-spin-button,

@@ -20,6 +20,7 @@ import { TbFileUpload, TbUsers } from "react-icons/tb";
 import { z } from "zod";
 
 import Select from "@components/ui/select";
+import { combineClassNames } from "@utils/style-utils";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -39,9 +40,10 @@ type FormFields = z.infer<typeof formSchema>;
 
 type CreateArtistFormProps = {
   onCreated?: () => void;
+  className?: string;
 };
 
-const CreateArtistForm = ({ onCreated }: CreateArtistFormProps) => {
+const CreateArtistForm = ({ onCreated, className }: CreateArtistFormProps) => {
   const { data: artistTypes } = useFetch(async (signal) => {
     return await getArtistTypes(signal);
   });
@@ -119,7 +121,10 @@ const CreateArtistForm = ({ onCreated }: CreateArtistFormProps) => {
           error={uploadError?.message}
         />
       </Modal>
-      <Form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+      <Form
+        className={combineClassNames(styles.form, className)}
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className={styles["cover-container-wrapper"]}>
           <div
             className={styles["cover-container"]}

@@ -1,16 +1,16 @@
 import { combineClassNames } from "@utils/style-utils";
 import styles from "./Loader.module.css";
 import { ComponentProps } from "react";
-import BounceLoader from "react-spinners/BounceLoader";
+import DotLoader from "react-spinners/DotLoader";
 
-type LoaderProps = ComponentProps<typeof BounceLoader> & {
+type LoaderProps = ComponentProps<typeof DotLoader> & {
   className?: string;
 };
 
 const Loader = (props: LoaderProps) => {
   return (
     <div className={combineClassNames(styles.container, props.className)}>
-      <BounceLoader color={props.color || "var(--accent)"} {...props} />
+      <DotLoader color={props.color || "var(--accent)"} {...props} />
     </div>
   );
 };

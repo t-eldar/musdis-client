@@ -11,13 +11,20 @@ type ArtistsLinksProps = {
 };
 
 const ArtistsLinks = ({ artists, className }: ArtistsLinksProps) => {
+  if (artists.length === 0)
+    return (
+      <div className={combineClassNames(styles["container"], className)}>
+        No musician
+      </div>
+    );
+
   return (
     <div className={combineClassNames(styles["container"], className)}>
       {artists.map((artist, i) => (
         <div key={artist.slug}>
           {i !== 0 && ", "}
           <Link
-            to={`/artists/${artist.slug}`}
+            to={`/musicians/${artist.slug}`}
             className={styles["link"]}
             onClick={(e) => e.stopPropagation()}
           >

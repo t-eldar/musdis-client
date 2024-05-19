@@ -26,6 +26,7 @@
 
 .text-field.text-field:focus {
   box-shadow: none;
+  border: none;
 }
 
 .search-button {

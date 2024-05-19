@@ -1,15 +1,21 @@
 .list {
   all: unset;
 
-  display: flex;
-  flex-wrap: wrap;
+  width: 100%;
+
+  box-sizing: border-box;
+
+  display: grid;
   gap: 1rem;
+
+  /* Define the number of columns based on available space */
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
 }
 
 .item {
   display: flex;
   align-items: end;
-  border-radius: 1rem;
+  border-radius: 2rem;
 
   background-position: center;
   background-size: cover;
@@ -19,12 +25,14 @@
     ),
     var(--bg-image-artist);
 
-  flex: 1 1 0;
-
-  min-height: 12rem;
+  width: 100%;
 
   max-width: 30rem;
+
   aspect-ratio: 4 / 3;
+
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+
 }
 
 .item:hover {
@@ -44,12 +52,13 @@
 }
 
 .info {
-  width: 100%;
+  width: calc(100% - 2rem);
   margin: 0.5rem 1rem;
   display: flex;
 
   justify-content: space-between;
   align-items: center;
+  gap: 0.2rem;
 }
 
 .icon {

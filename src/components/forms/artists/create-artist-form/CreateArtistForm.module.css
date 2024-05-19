@@ -18,6 +18,7 @@
 }
 
 .cover-container {
+  background-color: var(--dark-alt);
   position: relative;
 
   border-radius: 1rem;
@@ -33,6 +34,11 @@
 
   width: 100%;
   aspect-ratio: 30 / 9;
+}
+
+.cover-container:hover {
+  background-color: var(--dark);
+  border: 1px dashed var(--accent);
 }
 
 .cover {
