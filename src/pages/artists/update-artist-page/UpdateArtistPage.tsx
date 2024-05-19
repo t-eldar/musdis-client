@@ -1,7 +1,9 @@
-import UpdateArtistForm from "@components/forms/artists/update-artist-form";
-import PageLoader from "@components/loaders/page-loader";
-import useAlert from "@hooks/use-alert";
-import useFetch from "@hooks/use-fetch";
+import styles from "./UpdateArtistPage.module.css";
+
+import { UpdateArtistForm } from "@components/forms/artists/update-artist-form";
+import { PageLoader } from "@components/loaders/page-loader";
+import { useAlert } from "@hooks/use-alert";
+import { useFetch } from "@hooks/use-fetch";
 import { getArtist } from "@services/artists";
 import { useAuthStore } from "@stores/auth-store";
 import { useEffect } from "react";
@@ -39,13 +41,15 @@ const UpdateArtistPage = () => {
   }
 
   return (
-    <>
+    <div className={styles.container}>
       {artist && (
         <UpdateArtistForm
+          onDeleted={() => navigate("/profile", { replace: true })}
+          className={styles.form}
           artist={{ artistTypeSlug: artist.type.slug, ...artist }}
         />
       )}
-    </>
+    </div>
   );
 };
 

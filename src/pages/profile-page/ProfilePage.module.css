@@ -125,6 +125,8 @@
   display: flex;
   align-items: center;
 
+  color: var(--accent);
+
   gap: 1rem;
 }
 
@@ -160,4 +162,8 @@
 .no-artists-container {
   display: flex;
   flex-direction: column;
+}
+
+.title {
+  font-size: 1.5rem;
 }

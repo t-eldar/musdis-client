@@ -1,15 +1,17 @@
 import ReleaseList from "@components/lists/release-list";
 import styles from "./ReleasesPage.module.css";
 
+import { Footer } from "@components/footer";
 import { PageLoader } from "@components/loaders/page-loader";
 import { Pagination } from "@components/pagination";
-import SearchBar from "@components/search-bar";
-import Separator from "@components/ui/separator";
+import { SearchBar } from "@components/search-bar";
 import { usePagedFetch } from "@hooks/use-paged-fetch";
 import { getLatestReleases } from "@services/releases";
 import { isCancelledError } from "@utils/assertions";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import Separator from "@components/ui/separator";
+import ErrorResponse from "@components/error-response";
 
 const LIMIT = 20;
 const ReleasesPage = () => {
@@ -46,6 +48,10 @@ const ReleasesPage = () => {
     return <PageLoader />;
   }
 
+  if (error && !isCancelledError(error)) {
+    return <ErrorResponse />;
+  }
+
   if (!releases) {
     return <></>;
   }
@@ -62,10 +68,8 @@ const ReleasesPage = () => {
             onSearch={(q) => setParams({ search: q })}
           />
         </div>
-        <div>
-          <ReleaseList releases={releases} />
-        </div>
-        <Separator />
+
+        <ReleaseList releases={releases} />
         <div className={styles.footer}>
           <Pagination
             onPageChange={setPage}
@@ -75,6 +79,8 @@ const ReleasesPage = () => {
             siblingCount={1}
           />
         </div>
+        <Separator />
+        <Footer />
       </div>
     </>
   );

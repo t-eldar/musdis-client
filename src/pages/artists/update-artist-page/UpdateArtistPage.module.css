@@ -1,0 +1,9 @@
+.container {
+  padding: 2rem;
+}
+
+.form {
+  border-radius: 2rem;
+  background-color: var(--dark);
+  padding: 1rem;
+}

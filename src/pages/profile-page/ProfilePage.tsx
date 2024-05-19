@@ -25,6 +25,8 @@ import Button from "@components/ui/button";
 import * as Avatar from "@radix-ui/react-avatar";
 import { FaGuitar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Separator from "@components/ui/separator";
+import Footer from "@components/footer";
 
 const ProfilePage = () => {
   const user = useAuthStore((state) => state.user);
@@ -69,7 +71,7 @@ const ProfilePage = () => {
   }
 
   function handleCreateArtistClick() {
-    navigate("/artists/create-artist");
+    navigate("/musicians/create-musician");
   }
 
   return (
@@ -129,23 +131,27 @@ const ProfilePage = () => {
                   onClick={handleCreateArtistClick}
                 >
                   <FaGuitar />
-                  Create your first artist
+                  Add your first musician
                 </Button>
               </div>
             ) : (
               <>
                 <div className={styles["list-info"]}>
                   <TbWaveSquare size={"2rem"} />
-                  <h2>Your artists</h2>
+                  <h2 className={styles.title}>your musicians</h2>
                   <Button
                     className={styles["create-artist-button"]}
                     onClick={handleCreateArtistClick}
                   >
                     <FaGuitar />
-                    Add new artist
+                    Add new musician
                   </Button>
                 </div>
-                {artists && <ArtistList artists={artists} />}
+                {artists && (
+                  <div className={styles["list-content"]}>
+                    <ArtistList artists={artists} />
+                  </div>
+                )}
               </>
             )}
           </div>
@@ -153,12 +159,14 @@ const ProfilePage = () => {
             <div className={styles["list-content"]}>
               <div className={styles["list-info"]}>
                 <TbDeviceAudioTape size={"2rem"} />
-                <h2>User releases</h2>
+                <h2 className={styles.title}>your releases</h2>
               </div>
               <ReleaseList releases={releases} />
             </div>
           )}
         </div>
+        <Separator />
+        <Footer />
       </div>
     </>
   );

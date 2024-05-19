@@ -4,13 +4,16 @@ import { ArtistsLinks } from "@components/artists-links";
 import { TrackList } from "@components/lists/track-list";
 import PageLoader from "@components/loaders/page-loader";
 import { Button } from "@components/ui/button";
+import useCanEdit from "@hooks/use-can-edit";
 import { useFetch } from "@hooks/use-fetch";
 import { getRelease } from "@services/releases";
 import { useAudioStore } from "@stores/audio-store";
+import { useAuthStore } from "@stores/auth-store";
+import { isCancelledError } from "@utils/assertions";
 import { formatDate, formatSeconds } from "@utils/time-utils";
-import { CSSProperties, useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 import { TbClock, TbList, TbPencil, TbPlayerPlayFilled } from "react-icons/tb";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 const ReleasePage = () => {
   const params = useParams<{ releaseSlug: string }>();
@@ -27,15 +30,23 @@ const ReleasePage = () => {
   const {
     data: release,
     isLoading: isReleaseLoading,
-    // error: releaseError,
+    error: releaseError,
   } = useFetch(async (abortSignal) => {
     return await getRelease(slug, abortSignal);
   });
+
+  const canEdit = useCanEdit(release);
 
   if (isReleaseLoading) {
     return <PageLoader />;
   }
 
+  if (
+    (!release && isReleaseLoading === false) ||
+    (releaseError && !isCancelledError(releaseError))
+  ) {
+    return <Navigate to={"/not-found"} />;
+  }
   if (!release) {
     return <></>;
   }
@@ -79,12 +90,14 @@ const ReleasePage = () => {
               <TbPlayerPlayFilled style={{ marginRight: "0.5rem" }} />
               Play all
             </Button>
-            <Button
-              className={styles["edit-button"]}
-              onClick={handleEditRelease}
-            >
-              <TbPencil /> Edit
-            </Button>
+            {canEdit && (
+              <Button
+                className={styles["edit-button"]}
+                onClick={handleEditRelease}
+              >
+                <TbPencil /> Edit
+              </Button>
+            )}
             <div className={styles["tracks-info"]}>
               <div className={styles["info"]}>
                 <TbList />

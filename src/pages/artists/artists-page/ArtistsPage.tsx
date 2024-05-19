@@ -1,3 +1,4 @@
+import Footer from "@components/footer";
 import styles from "./ArtistsPage.module.css";
 
 import { ArtistList } from "@components/lists/artist-list";
@@ -10,6 +11,7 @@ import { getArtists } from "@services/artists";
 import { isCancelledError } from "@utils/assertions";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import ErrorResponse from "@components/error-response";
 
 const LIMIT = 20;
 const ArtistsPage = () => {
@@ -45,6 +47,10 @@ const ArtistsPage = () => {
     return <PageLoader />;
   }
 
+  if (error && !isCancelledError(error)) { 
+    return <ErrorResponse />;
+  }
+
   if (!artists) {
     return <></>;
   }
@@ -52,7 +58,7 @@ const ArtistsPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles["search-container"]}>
-        <h1>Artists</h1>
+        <h1>Musicians</h1>
         <SearchBar
           className={styles.search}
           value={searchValue}
@@ -61,7 +67,6 @@ const ArtistsPage = () => {
         />
       </div>
       <ArtistList artists={artists} />
-      <Separator />
       <div className={styles.footer}>
         <Pagination
           onPageChange={setPage}
@@ -71,6 +76,8 @@ const ArtistsPage = () => {
           siblingCount={1}
         />
       </div>
+      <Separator />
+      <Footer />
     </div>
   );
 };
