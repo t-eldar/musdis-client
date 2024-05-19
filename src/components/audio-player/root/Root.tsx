@@ -1,19 +1,25 @@
 import { AudioPlayerContext } from "@components/audio-player/context";
 import { useDidMountEffect } from "@hooks/use-did-mount-effect";
 import { useAudioStore } from "@stores/audio-store";
-import { ComponentProps, useEffect, useRef, useState } from "react";
+import {
+  ComponentProps,
+  PropsWithChildren,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
-type RootProps = ComponentProps<"div"> & {
-  children: JSX.Element | JSX.Element[];
-  currentSong: {
-    title: string;
-    audioUrl: string;
-    artists: { name: string; slug: string }[];
-    coverUrl: string;
+type RootProps = PropsWithChildren &
+  ComponentProps<"div"> & {
+    currentSong: {
+      title: string;
+      audioUrl: string;
+      artists: { name: string; slug: string }[];
+      coverUrl: string;
+    };
+    onNext: () => void;
+    onPrevious: () => void;
   };
-  onNext: () => void;
-  onPrevious: () => void;
-};
 
 const Root = ({
   children,

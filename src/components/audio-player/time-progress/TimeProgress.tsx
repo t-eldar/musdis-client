@@ -1,10 +1,14 @@
+import styles from "./TimeProgress.module.css";
+
 import { useAudioPlayerContext } from "@components/audio-player/context";
+import { combineClassNames } from "@utils/style-utils";
 import { formatDuration } from "@utils/time-utils";
 import { ComponentProps, useEffect, useState } from "react";
 
-type TimeProgressProps = ComponentProps<"div">;
-const TimeProgress = (props: TimeProgressProps) => {
-
+type TimeProgressProps = ComponentProps<"div"> & {
+  separator?: React.ReactNode;
+};
+const TimeProgress = ({ separator = "/", ...props }: TimeProgressProps) => {
   const context = useAudioPlayerContext();
   if (context === null) {
     throw new Error(
@@ -12,8 +16,10 @@ const TimeProgress = (props: TimeProgressProps) => {
     );
   }
 
+  const { className, ...rest } = props;
+
   const { audioElement, isReady } = context;
-  
+
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(audioElement?.duration || 0);
 
@@ -49,8 +55,10 @@ const TimeProgress = (props: TimeProgressProps) => {
   }, [audioElement]);
 
   return (
-    <div {...props}>
-      {currentString} / {durationString}
+    <div className={combineClassNames(styles.container, className)} {...rest}>
+      <span className={styles["current-time"]}>{currentString}</span>{" "}
+      <span>{separator}</span>
+      <span className={styles.duration}>{durationString}</span>
     </div>
   );
 };

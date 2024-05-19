@@ -6,6 +6,9 @@ import { ArtistsLinks } from "@components/artists-links";
 import { useAudioStore } from "@stores/audio-store";
 import { combineClassNames } from "@utils/style-utils";
 import { useEffect, useState } from "react";
+import TrackList from "@components/lists/track-list";
+import Button from "@components/ui/button";
+import { TbChevronDown, TbChevronUp, TbList, TbX } from "react-icons/tb";
 
 type AudioPlayerOverlayProps = {
   onActiveChange?: (isActive: boolean) => void;
@@ -17,6 +20,9 @@ const AudioPlayerOverlay = ({ onActiveChange }: AudioPlayerOverlayProps) => {
   const audioElement = useAudioStore((state) => state.audioElement);
 
   const [isActive, setIsActive] = useState(false);
+
+  const [tracksShown, setTracksShown] = useState(false);
+  const [isShowClicked, setIsShowClicked] = useState(false);
 
   const [track, setTrack] = useState<{
     title: string;
@@ -42,6 +48,14 @@ const AudioPlayerOverlay = ({ onActiveChange }: AudioPlayerOverlayProps) => {
 
     return () => clearTimeout(timer);
   }, [track, audioElement]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTracksShown(isShowClicked);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [isShowClicked]);
 
   useEffect(() => {
     if (playlist && trackId !== null) {
@@ -72,6 +86,11 @@ const AudioPlayerOverlay = ({ onActiveChange }: AudioPlayerOverlayProps) => {
     }
   }
 
+  function handleClose() {
+    setIsActive(false);
+    audioElement?.pause();
+  }
+
   if (track) {
     return (
       <div
@@ -81,6 +100,7 @@ const AudioPlayerOverlay = ({ onActiveChange }: AudioPlayerOverlayProps) => {
         )}
       >
         <AudioPlayer.Root
+          className={styles.root}
           currentSong={track}
           onNext={handleNext}
           onPrevious={handlePrevious}
@@ -93,12 +113,41 @@ const AudioPlayerOverlay = ({ onActiveChange }: AudioPlayerOverlayProps) => {
                 <ArtistsLinks artists={track.artists} />
               </div>
             </div>
-            <div className={styles["controls-container"]}>
+            <div className={styles["controls"]}>
               <AudioPlayer.Controls />
-              <AudioPlayer.ProgressBar />
             </div>
             <AudioPlayer.TimeProgress className={styles["time-progress"]} />
+            <div className={styles["overlay-display-buttons"]}>
+              <Button
+                className={styles["overlay-button"]}
+                onClick={() => setIsShowClicked((s) => !s)}
+              >
+                <TbList />
+                {tracksShown ? <TbChevronDown /> : <TbChevronUp />}
+              </Button>
+            </div>
+            <div className={styles["progress-bar"]}>
+              <AudioPlayer.ProgressBar />
+            </div>
           </div>
+
+          {playlist && (
+            <div
+              className={combineClassNames(
+                styles["tracks-container"],
+                tracksShown
+                  ? styles["tracks-container-visible"]
+                  : styles["tracks-container-hidden"]
+              )}
+            >
+              <div className={styles.tracks}>
+                <TrackList tracks={playlist} />
+              </div>
+            </div>
+          )}
+          <Button className={styles["close-button"]} onClick={handleClose}>
+            <TbX />
+          </Button>
         </AudioPlayer.Root>
       </div>
     );

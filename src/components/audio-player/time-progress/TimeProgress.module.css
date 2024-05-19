@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.current-time,
+.duration {
+  width: 3rem;
+}
+
+.current-time {
+  text-align: end;
+}
+.duration {
+  text-align: start;
+}
