@@ -1,0 +1,24 @@
+.logo {
+  font-family: "Permanent Marker", cursive;
+  color: var(--accent);
+}
+
+.small {
+  font-size: 1.3rem;
+}
+
+.medium {
+  font-size: 2rem;
+}
+
+.large {
+  font-size: 3rem;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  color: var(--accent-light);
+}
