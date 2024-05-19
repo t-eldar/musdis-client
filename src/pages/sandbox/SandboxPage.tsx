@@ -1,3 +1,4 @@
+import TapeLoader from "@components/loaders/tape-loader/TapeLoader";
 
 /**
  * Page for testing components in isolation.
@@ -14,7 +15,14 @@ const SandboxPage = () => {
 
   return (
     <>
-      <div>dsds</div>
+    <div>dsdsdsd</div>
+    <div>dsdsdsd</div>
+    <div>dsdsdsd</div>
+    <div>dsdsdsd</div>
+    <div>dsdsdsd</div>
+    <div>dsdsdsd</div>
+    <div>dsdsdsd</div>
+      <TapeLoader />
     </>
   );
 };
