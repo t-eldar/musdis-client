@@ -1,0 +1,210 @@
+:root {
+  --rod-cover-size: 24rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+  gap: 1rem;
+
+  color: var(--light);
+}
+
+.hero-section {
+  --alpha-dark-1: color-mix(in srgb, var(--dark), #0000 50%);
+  --alpha-dark-2: color-mix(in srgb, var(--dark), #0000 50%);
+  background-image: linear-gradient(
+      to bottom,
+      var(--alpha-dark-1) 0%,
+      var(--alpha-dark-2) 100%
+    ),
+    url("/public/headphones.jpg");
+  background-size: cover;
+  background-position: center;
+
+  display: grid;
+  grid-template-areas:
+    ". . . . . . . . . ."
+    ". t t t t . . . . ."
+    ". b b . . . . . . ."
+    ". . . . . . . . . .";
+
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+
+  border-radius: 2rem;
+  width: 100%;
+  height: 30rem;
+}
+
+.hero-text {
+  grid-area: t;
+}
+.hero-button {
+  grid-area: b;
+
+  padding: 1.2rem 2rem;
+
+  align-items: center;
+  gap: 0.4rem;
+
+  width: fit-content;
+  height: fit-content;
+  border-radius: 20rem;
+}
+
+.hero-button:hover {
+  background-color: var(--accent-light);
+}
+
+.titled-section {
+  width: 100%;
+}
+.titled-section h1 {
+  margin: 0;
+  margin-left: 2rem;
+}
+
+.cover {
+  object-fit: cover;
+  border-radius: 2rem;
+  height: var(--rod-cover-size);
+
+  cursor: pointer;
+
+  aspect-ratio: 1;
+}
+
+.cover-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.release-of-day {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  background-color: var(--dark);
+  border-radius: 2rem;
+}
+
+.release-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  max-width: 100%;
+}
+.release-info h1 {
+  margin: 0;
+}
+
+.release-link {
+  all: unset;
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  width: 100%;
+
+  overflow: scroll;
+  scrollbar-width: none;
+}
+.release-link:hover {
+  text-decoration: underline;
+}
+
+.title {
+  font-size: 2rem;
+  color: var(--accent);
+}
+
+.tracks {
+  padding: 0.1rem;
+  height: var(--rod-cover-size);
+  overflow-y: scroll;
+
+  justify-content: center;
+
+  width: 100%;
+}
+
+.latest-releases {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+
+  gap: 2rem;
+
+  background-color: var(--dark);
+  border-radius: 2rem;
+}
+
+.latest-releases h1 {
+  margin: 0;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.see-more-button {
+  width: 50%;
+  background-color: var(--dark-alt);
+
+  color: var(--accent);
+
+  border-radius: 100rem;
+}
+
+.see-more-button:hover {
+  color: var(--accent-light);
+}
+
+.right-side {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  width: 100%;
+
+  padding: 1rem;
+
+  height: var(--rod-cover-size);
+}
+
+.release-bottom-info {
+  display: flex;
+  gap: 2rem;
+
+  justify-content: space-between;
+}
+
+.iconed-info-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.iconed-info {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+
+  font-weight: 300;
+}
+
+@media screen and (max-width: 768px) {
+  .release-of-day {
+    flex-direction: column;
+  }
+}
